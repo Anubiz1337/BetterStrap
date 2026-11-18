@@ -499,14 +499,10 @@
 		<RiShadeDepthSources Include="$(RiShadeDepthRoot)/CMakeLists.txt;$(RiShadeDepthRoot)/src/**/*.cpp;$(RiShadeDepthRoot)/src/**/*.h" />
 	</ItemGroup>
 
-	<Target Name="BuildRiShade" BeforeTargets="AssignTargetPaths" Condition="'$(DesignTimeBuild)' != 'true' And '$(OS)' == 'Windows_NT' And Exists('$(RiShadeCrate)/Cargo.toml')" Inputs="$(RiShadeCrate)/Cargo.toml;$(RiShadeCrate)/Cargo.lock;$(RiShadeCrate)/reshade-addon/Cargo.toml;@(RiShadeSources);@(RiShadeDepthSources)" Outputs="$(RiShadeCoreDll);$(RiShadeAddonDll);$(RiShadeDepthBridgeDll)">
-		<Exec Command="&quot;$(RiShadeCMake)&quot; -S &quot;$(RiShadeDepthRoot)&quot; -B &quot;$(RiShadeDepthBuild)&quot; -A x64" StandardOutputImportance="low" />
-		<Exec Command="&quot;$(RiShadeCMake)&quot; --build &quot;$(RiShadeDepthBuild)&quot; --config Release" StandardOutputImportance="low" />
-		<Exec Command="&quot;$(VoidImageCargo)&quot; build --workspace --locked --quiet --release --lib --target x86_64-pc-windows-msvc --manifest-path &quot;$(RiShadeCrate)/Cargo.toml&quot; --target-dir &quot;$(RiShadeTargetDir)&quot;" />
+	<Target Name="BuildRiShade" BeforeTargets="AssignTargetPaths" Condition="false">
 	</Target>
 
-	<Target Name="RequireRiShadeLibraries" AfterTargets="BuildRiShade" BeforeTargets="AssignTargetPaths" Condition="'$(DesignTimeBuild)' != 'true' And '$(OS)' == 'Windows_NT'">
-		<Error Condition="!Exists('$(RiShadeCoreDll)') Or !Exists('$(RiShadeAddonDll)') Or !Exists('$(RiShadeDepthBridgeDll)')" Text="RiShade's native libraries could not be built. Install Rust with the x86_64-pc-windows-msvc target and the Visual C++ build tools with CMake." />
+	<Target Name="RequireRiShadeLibraries" AfterTargets="BuildRiShade" BeforeTargets="AssignTargetPaths" Condition="false">
 	</Target>
 
 	<Target Name="IncludeRiShadeLibraries" AfterTargets="BuildRiShade" BeforeTargets="AssignTargetPaths" Condition="Exists('$(RiShadeCoreDll)') And Exists('$(RiShadeAddonDll)') And Exists('$(RiShadeDepthBridgeDll)')">

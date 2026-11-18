@@ -63,12 +63,6 @@ curl -fsSL https://betterstrapp.pages.dev/install.sh | sh
 >
 > As of BetterStrap Version `1.1.2.3`, Multi-Instance Launching has been removed from the app and will not be added back in the future.
 
-## Contributors
-
-<a>
-  <img src="https://raw.githubusercontent.com/KloBraticc/BetterStrap/output/contributors.svg" alt="BetterStrap contributors" />
-</a>
-
 ## Contents
 
 * [Installation](#installation)
