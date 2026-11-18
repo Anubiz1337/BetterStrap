@@ -5,25 +5,25 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 fn main() {
-    println!("cargo:rerun-if-env-changed=VOIDSTRAP_LAUNCHER_PAYLOAD");
-    println!("cargo:rerun-if-env-changed=VOIDSTRAP_VERSION");
-    println!("cargo:rerun-if-env-changed=VOIDSTRAP_DOTNET_MAJOR");
-    println!("cargo:rerun-if-env-changed=VOIDSTRAP_RC");
-    println!("cargo:rerun-if-changed=voidstrap.manifest");
+    println!("cargo:rerun-if-env-changed=BETTERSTRAP_LAUNCHER_PAYLOAD");
+    println!("cargo:rerun-if-env-changed=BETTERSTRAP_VERSION");
+    println!("cargo:rerun-if-env-changed=BETTERSTRAP_DOTNET_MAJOR");
+    println!("cargo:rerun-if-env-changed=BETTERSTRAP_RC");
+    println!("cargo:rerun-if-changed=betterstrap.manifest");
 
     let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
-    let payload = PathBuf::from(env::var("VOIDSTRAP_LAUNCHER_PAYLOAD").expect("VOIDSTRAP_LAUNCHER_PAYLOAD must point at the published Voidstrap.exe"));
+    let payload = PathBuf::from(env::var("BETTERSTRAP_LAUNCHER_PAYLOAD").expect("BETTERSTRAP_LAUNCHER_PAYLOAD must point at the published BetterStrap.exe"));
     println!("cargo:rerun-if-changed={}", payload.display());
-    let version = env::var("VOIDSTRAP_VERSION").unwrap_or_else(|_| "0.0.0.0".into());
-    let major = env::var("VOIDSTRAP_DOTNET_MAJOR").unwrap_or_else(|_| "10".into());
+    let version = env::var("BETTERSTRAP_VERSION").unwrap_or_else(|_| "0.0.0.0".into());
+    let major = env::var("BETTERSTRAP_DOTNET_MAJOR").unwrap_or_else(|_| "10".into());
 
     let payload_bytes = fs::read(&payload).expect("the launcher payload could not be read");
     let uncompressed_len = payload_bytes.len();
     let hash = fnv1a(&payload_bytes);
-    println!("cargo:rustc-env=VOIDSTRAP_PAYLOAD_DIR={}-{:016x}", version, hash);
-    println!("cargo:rustc-env=VOIDSTRAP_DOTNET_MAJOR={}", major);
-    println!("cargo:rustc-env=VOIDSTRAP_PAYLOAD_LEN={}", uncompressed_len);
+    println!("cargo:rustc-env=BETTERSTRAP_PAYLOAD_DIR={}-{:016x}", version, hash);
+    println!("cargo:rustc-env=BETTERSTRAP_DOTNET_MAJOR={}", major);
+    println!("cargo:rustc-env=BETTERSTRAP_PAYLOAD_LEN={}", uncompressed_len);
 
     let mut encoder = lzma_rust2::XzWriter::new(Vec::new(), lzma_rust2::XzOptions::with_preset(9))
         .expect("the launcher payload could not be compressed");
@@ -34,8 +34,8 @@ fn main() {
     let compressed_payload = out_dir.join("payload.compressed");
     fs::write(&compressed_payload, &compressed).expect("could not write compressed payload");
 
-    let icon = manifest_dir.join("..").join("..").join("src").join("Voidstrap.App").join("favicon (1).ico");
-    let manifest = manifest_dir.join("voidstrap.manifest");
+    let icon = manifest_dir.join("..").join("..").join("src").join("BetterStrap.App").join("favicon (1).ico");
+    let manifest = manifest_dir.join("betterstrap.manifest");
     let mut parts: Vec<String> = version.split('.').map(|part| part.parse::<u16>().unwrap_or(0).to_string()).collect();
     parts.resize(4, "0".into());
     let numeric = parts.join(",");
@@ -57,12 +57,12 @@ BEGIN\n\
   BEGIN\n\
     BLOCK \"040904b0\"\n\
     BEGIN\n\
-      VALUE \"CompanyName\", \"Voidstrap\"\n\
-      VALUE \"FileDescription\", \"Voidstrap\"\n\
+      VALUE \"CompanyName\", \"BetterStrap\"\n\
+      VALUE \"FileDescription\", \"BetterStrap\"\n\
       VALUE \"FileVersion\", \"{version}\"\n\
-      VALUE \"InternalName\", \"Voidstrap\"\n\
-      VALUE \"OriginalFilename\", \"Voidstrap.exe\"\n\
-      VALUE \"ProductName\", \"Voidstrap\"\n\
+      VALUE \"InternalName\", \"BetterStrap\"\n\
+      VALUE \"OriginalFilename\", \"BetterStrap.exe\"\n\
+      VALUE \"ProductName\", \"BetterStrap\"\n\
       VALUE \"ProductVersion\", \"{version}\"\n\
     END\n\
   END\n\
@@ -85,7 +85,7 @@ END\n",
         .arg(&res_file)
         .arg(&rc_file)
         .status()
-        .expect("rc.exe could not be started, install the Windows SDK or set VOIDSTRAP_RC");
+        .expect("rc.exe could not be started, install the Windows SDK or set BETTERSTRAP_RC");
     assert!(status.success(), "rc.exe failed to compile the launcher resources");
     println!("cargo:rustc-link-arg-bins={}", res_file.display());
 }
@@ -109,7 +109,7 @@ fn fnv1a(buffer: &[u8]) -> u64 {
 }
 
 fn find_rc() -> PathBuf {
-    if let Ok(rc) = env::var("VOIDSTRAP_RC") {
+    if let Ok(rc) = env::var("BETTERSTRAP_RC") {
         return PathBuf::from(rc);
     }
     let program_files = env::var("ProgramFiles(x86)").unwrap_or_else(|_| r"C:\Program Files (x86)".into());

@@ -14,14 +14,14 @@ for tool in dotnet cargo cmake git tar gzip; do
   command -v "$tool" >/dev/null 2>&1 || { echo "$tool is unavailable, install: pkg install $DEPENDENCIES"; exit 1; }
 done
 
-RID="${VOIDSTRAP_FREEBSD_RID:-$(dotnet --info | sed -n 's/^[[:space:]]*RID:[[:space:]]*//p' | head -n 1)}"
+RID="${BETTERSTRAP_FREEBSD_RID:-$(dotnet --info | sed -n 's/^[[:space:]]*RID:[[:space:]]*//p' | head -n 1)}"
 case "$RID" in
   freebsd-x64|freebsd.*-x64) ;;
   *) echo "The .NET SDK runtime identifier $RID is not a FreeBSD amd64 identifier"; exit 1 ;;
 esac
 
 if [ -z "$VERSION" ]; then
-  VERSION="$(sed -n 's:^[[:space:]]*<VoidstrapVersion>\(.*\)</VoidstrapVersion>[[:space:]]*$:\1:p' "$ROOT/Directory.Build.props" | head -n 1)"
+  VERSION="$(sed -n 's:^[[:space:]]*<BetterStrapVersion>\(.*\)</BetterStrapVersion>[[:space:]]*$:\1:p' "$ROOT/Directory.Build.props" | head -n 1)"
 fi
 if [[ ! "$VERSION" =~ ^[0-9]+([.][0-9]+){1,3}$ ]]; then
   echo "The package version is invalid"
@@ -30,7 +30,7 @@ fi
 
 mkdir -p "$OUTPUT"
 OUTPUT="$(cd "$OUTPUT" && pwd)"
-FINAL_TARGET="$OUTPUT/Voidstrap_${VERSION}_freebsd-x64.tar.gz"
+FINAL_TARGET="$OUTPUT/BetterStrap_${VERSION}_freebsd-x64.tar.gz"
 if [ -e "$FINAL_TARGET" ]; then
   echo "The requested output already exists"
   exit 1
@@ -50,16 +50,16 @@ cleanup() {
   fi
 }
 trap cleanup EXIT
-STAGE="$(mktemp -d "${TMPDIR:-/tmp}/voidstrap-freebsd.XXXXXX")"
+STAGE="$(mktemp -d "${TMPDIR:-/tmp}/betterstrap-freebsd.XXXXXX")"
 PUBLISH="$STAGE/publish"
 mkdir -p "$PUBLISH"
 
-dotnet publish "$ROOT/src/Voidstrap.Cross/Voidstrap.Cross.csproj" -c Release -r "$RID" --self-contained true -o "$PUBLISH" -p:VoidstrapLinuxPackagingRoot="$STAGE/" -p:Version="$VERSION" -p:DebugType=none -p:DebugSymbols=false
-test -s "$PUBLISH/Voidstrap"
+dotnet publish "$ROOT/src/BetterStrap.Cross/BetterStrap.Cross.csproj" -c Release -r "$RID" --self-contained true -o "$PUBLISH" -p:BetterStrapLinuxPackagingRoot="$STAGE/" -p:Version="$VERSION" -p:DebugType=none -p:DebugSymbols=false
+test -s "$PUBLISH/BetterStrap"
 if [ "$(find "$PUBLISH" -mindepth 1 ! -path "$PUBLISH/licenses" ! -path "$PUBLISH/licenses/*" | wc -l | tr -d ' ')" -ne 1 ]; then
   echo "The FreeBSD publish is not a single file"
   find "$PUBLISH" -mindepth 1
   exit 1
 fi
 
-bash "$ROOT/build/Packaging/FreeBSD/archive.sh" "$VERSION" "$OUTPUT" "$PUBLISH/Voidstrap" "$NATIVE"
+bash "$ROOT/build/Packaging/FreeBSD/archive.sh" "$VERSION" "$OUTPUT" "$PUBLISH/BetterStrap" "$NATIVE"

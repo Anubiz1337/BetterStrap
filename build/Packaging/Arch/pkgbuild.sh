@@ -6,10 +6,10 @@ OUTPUT="${2:?An output directory is required}"
 X64_CHECKSUM_SOURCE="${3:?An x86_64 archive or SHA256 checksum is required}"
 ARM64_CHECKSUM_SOURCE="${4:?An aarch64 archive or SHA256 checksum is required}"
 METADATA_ARCHIVE="${5:-}"
-PROJECT_URL="https://github.com/KloBraticc/Voidstrap"
+PROJECT_URL="https://github.com/KloBraticc/BetterStrap"
 
 if [ -z "$VERSION" ]; then
-  VERSION="$(sed -n 's:^[[:space:]]*<VoidstrapVersion>\(.*\)</VoidstrapVersion>[[:space:]]*$:\1:p' "$ROOT/Directory.Build.props" | head -n 1)"
+  VERSION="$(sed -n 's:^[[:space:]]*<BetterStrapVersion>\(.*\)</BetterStrapVersion>[[:space:]]*$:\1:p' "$ROOT/Directory.Build.props" | head -n 1)"
 fi
 
 if [[ ! "$VERSION" =~ ^[0-9]+([.][0-9]+){1,3}$ ]]; then
@@ -44,7 +44,7 @@ if [ -e "$PKGBUILD_TARGET" ] || [ -e "$SRCINFO_TARGET" ]; then
 fi
 
 cat > "$PKGBUILD_TARGET" <<PKGBUILD
-pkgname=voidstrap-bin
+pkgname=betterstrap-bin
 pkgver=$VERSION
 pkgrel=1
 pkgdesc='Customize and launch Roblox through Sober on Linux'
@@ -57,21 +57,21 @@ optdepends=('vulkan-swrast: software rendering when no GPU Vulkan driver works'
             'pipewire: Roblox audio session controls'
             'wireplumber: Roblox audio session controls'
             'xorg-xrandr: display refresh rate detection')
-provides=('voidstrap')
-conflicts=('voidstrap')
+provides=('betterstrap')
+conflicts=('betterstrap')
 options=('!strip' '!debug')
-source_x86_64=("\$url/releases/download/v\$pkgver/Voidstrap_\${pkgver}_linux-x64.tar.gz")
-source_aarch64=("\$url/releases/download/v\$pkgver/Voidstrap_\${pkgver}_linux-arm64.tar.gz")
+source_x86_64=("\$url/releases/download/v\$pkgver/BetterStrap_\${pkgver}_linux-x64.tar.gz")
+source_aarch64=("\$url/releases/download/v\$pkgver/BetterStrap_\${pkgver}_linux-arm64.tar.gz")
 sha256sums_x86_64=('$X64_CHECKSUM')
 sha256sums_aarch64=('$ARM64_CHECKSUM')
 
 package() {
-    install -Dm755 "\$srcdir/Voidstrap/Voidstrap" "\$pkgdir/usr/lib/voidstrap/Voidstrap"
+    install -Dm755 "\$srcdir/BetterStrap/BetterStrap" "\$pkgdir/usr/lib/betterstrap/BetterStrap"
     install -dm755 "\$pkgdir/usr/bin"
-    ln -s /usr/lib/voidstrap/Voidstrap "\$pkgdir/usr/bin/voidstrap"
+    ln -s /usr/lib/betterstrap/BetterStrap "\$pkgdir/usr/bin/betterstrap"
     install -dm755 "\$pkgdir/usr/share"
-    cp -a "\$srcdir/Voidstrap/share/." "\$pkgdir/usr/share/"
-    mv "\$pkgdir/usr/share/licenses/voidstrap" "\$pkgdir/usr/share/licenses/\$pkgname"
+    cp -a "\$srcdir/BetterStrap/share/." "\$pkgdir/usr/share/"
+    mv "\$pkgdir/usr/share/licenses/betterstrap" "\$pkgdir/usr/share/licenses/\$pkgname"
 }
 PKGBUILD
 
@@ -79,7 +79,7 @@ if command -v makepkg >/dev/null 2>&1; then
   (cd "$OUTPUT" && makepkg --printsrcinfo) > "$SRCINFO_TARGET"
 else
   cat > "$SRCINFO_TARGET" <<SRCINFO
-pkgbase = voidstrap-bin
+pkgbase = betterstrap-bin
 	pkgdesc = Customize and launch Roblox through Sober on Linux
 	pkgver = $VERSION
 	pkgrel = 1
@@ -136,16 +136,16 @@ pkgbase = voidstrap-bin
 	optdepends = pipewire: Roblox audio session controls
 	optdepends = wireplumber: Roblox audio session controls
 	optdepends = xorg-xrandr: display refresh rate detection
-	provides = voidstrap
-	conflicts = voidstrap
+	provides = betterstrap
+	conflicts = betterstrap
 	options = !strip
 	options = !debug
-	source_x86_64 = $PROJECT_URL/releases/download/v$VERSION/Voidstrap_${VERSION}_linux-x64.tar.gz
+	source_x86_64 = $PROJECT_URL/releases/download/v$VERSION/BetterStrap_${VERSION}_linux-x64.tar.gz
 	sha256sums_x86_64 = $X64_CHECKSUM
-	source_aarch64 = $PROJECT_URL/releases/download/v$VERSION/Voidstrap_${VERSION}_linux-arm64.tar.gz
+	source_aarch64 = $PROJECT_URL/releases/download/v$VERSION/BetterStrap_${VERSION}_linux-arm64.tar.gz
 	sha256sums_aarch64 = $ARM64_CHECKSUM
 
-pkgname = voidstrap-bin
+pkgname = betterstrap-bin
 SRCINFO
 fi
 

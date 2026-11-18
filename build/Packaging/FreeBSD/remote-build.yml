@@ -69,7 +69,7 @@ jobs:
             mkdir -p /usr/local/dotnet10
             tar -xzf "$ROOT/.freebsd-pkg/$SDK" -C /usr/local/dotnet10 --exclude './sdk' --exclude 'sdk'
             export DOTNET_ROOT=/usr/local/dotnet10
-            export CARGO_HOME="$ROOT/.freebsd-cargo/home" VOIDSTRAP_NATIVE_TARGET_ROOT="$ROOT/.freebsd-cargo/target"
+            export CARGO_HOME="$ROOT/.freebsd-cargo/home" BETTERSTRAP_NATIVE_TARGET_ROOT="$ROOT/.freebsd-cargo/target"
             if [ "${{ steps.cargo.outputs.cache-hit }}" = "true" ]; then
               find native -type f -exec touch -t 200001010000 {} +
             fi
@@ -79,7 +79,7 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          name: voidstrap-freebsd-kit
+          name: betterstrap-freebsd-kit
           path: kit/
           if-no-files-found: error
           compression-level: 0

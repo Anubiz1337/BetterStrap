@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>latest</LangVersion>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<RootNamespace>BetterStrap.Platform.Linux</RootNamespace>
+		<AssemblyName>BetterStrap.Platform.Linux</AssemblyName>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\BetterStrap.Core\BetterStrap.Core.csproj" />
+		<ProjectReference Include="..\BetterStrap.Platform.Abstractions\BetterStrap.Platform.Abstractions.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Tomlyn" Version="2.11.0" />
+	</ItemGroup>
+</Project>

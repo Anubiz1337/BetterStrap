@@ -4,7 +4,7 @@ param(
 	[string]$Version,
 
 	[ValidatePattern('\A[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\z')]
-	[string]$Repository = 'KloBraticc/Voidstrap',
+	[string]$Repository = 'KloBraticc/BetterStrap',
 
 	[Parameter(Mandatory = $true)]
 	[string]$OutputDirectory,
@@ -15,16 +15,16 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$identifier = 'KloBraticc.Voidstrap'
-$packageFolder = Join-Path $OutputDirectory ("KloBraticc\Voidstrap\" + $Version)
+$identifier = 'KloBraticc.BetterStrap'
+$packageFolder = Join-Path $OutputDirectory ("KloBraticc\BetterStrap\" + $Version)
 [System.IO.Directory]::CreateDirectory($packageFolder) | Out-Null
 
-$assetName = 'Voidstrap.exe'
+$assetName = 'BetterStrap.exe'
 $tag = 'v' + $Version
 $installerUrl = "https://github.com/$Repository/releases/download/$tag/$assetName"
 $releaseUrl = "https://github.com/$Repository/releases/tag/$tag"
 
-$downloads = Join-Path ([IO.Path]::GetTempPath()) ('VoidstrapWinget/' + [Guid]::NewGuid().ToString('N'))
+$downloads = Join-Path ([IO.Path]::GetTempPath()) ('BetterStrapWinget/' + [Guid]::NewGuid().ToString('N'))
 [System.IO.Directory]::CreateDirectory($downloads) | Out-Null
 $assetPath = Join-Path $downloads $assetName
 
@@ -71,10 +71,10 @@ Installers:
     UpgradeBehavior: install
     Scope: user
     AppsAndFeaturesEntries:
-      - DisplayName: Voidstrap
+      - DisplayName: BetterStrap
         DisplayVersion: $Version
-        Publisher: Voidstrap
-        ProductCode: Voidstrap
+        Publisher: BetterStrap
+        ProductCode: BetterStrap
 ManifestType: installer
 ManifestVersion: $ManifestVersion
 "@
@@ -86,17 +86,17 @@ PackageVersion: $Version
 PackageLocale: en-US
 Publisher: KloBraticc
 PublisherUrl: https://github.com/KloBraticc
-PublisherSupportUrl: https://github.com/KloBraticc/Voidstrap/issues
-PackageName: Voidstrap
-PackageUrl: https://github.com/KloBraticc/Voidstrap
+PublisherSupportUrl: https://github.com/KloBraticc/BetterStrap/issues
+PackageName: BetterStrap
+PackageUrl: https://github.com/KloBraticc/BetterStrap
 License: MIT
-LicenseUrl: https://github.com/KloBraticc/Voidstrap/blob/main/LICENSE.VOIDSTRAP
+LicenseUrl: https://github.com/KloBraticc/BetterStrap/blob/main/LICENSE.BETTERSTRAP
 ShortDescription: Fast, customizable Roblox bootstrapper with FastFlags, mods and deep customization
 Description: |-
-  Voidstrap is a launcher for Roblox on Windows with FastFlags, custom integrations,
+  BetterStrap is a launcher for Roblox on Windows with FastFlags, custom integrations,
   multi instance support, modular UI customization and performance tuning. The app
   installs per user, keeps Windows and Linux in sync and updates itself from GitHub.
-Moniker: voidstrap
+Moniker: betterstrap
 Tags:
   - roblox
   - launcher

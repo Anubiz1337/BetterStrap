@@ -6,7 +6,7 @@ publish = false
 license = "MIT"
 
 [[bin]]
-name = "Voidstrap"
+name = "BetterStrap"
 path = "src/main.rs"
 
 [dependencies]

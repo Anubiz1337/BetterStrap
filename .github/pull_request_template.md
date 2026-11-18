@@ -16,4 +16,4 @@ List what you ran or checked.
 - [ ] I described any affected platform or hardware I could not test
 - [ ] No code comments were added, and new UI text is in `Strings.resx`
 - [ ] Screenshots or recordings are attached when the appearance or interaction changed
-- [ ] I followed the [contributing guide](https://github.com/KloBraticc/Voidstrap/blob/main/CONTRIBUTING.md)
+- [ ] I followed the [contributing guide](https://github.com/KloBraticc/BetterStrap/blob/main/CONTRIBUTING.md)

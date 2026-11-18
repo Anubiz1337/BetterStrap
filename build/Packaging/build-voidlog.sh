@@ -4,8 +4,8 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 RID="${1:?A runtime identifier is required}"
 OUTPUT="${2:?An output library is required}"
 TARGET_DIR="${3:-$ROOT/native/voidlog/target}"
-[ -n "${VOIDSTRAP_NATIVE_TARGET_ROOT:-}" ] && TARGET_DIR="$VOIDSTRAP_NATIVE_TARGET_ROOT/voidlog"
-GLIBC_FLOOR="${VOIDSTRAP_VOIDLOG_GLIBC:-2.17}"
+[ -n "${BETTERSTRAP_NATIVE_TARGET_ROOT:-}" ] && TARGET_DIR="$BETTERSTRAP_NATIVE_TARGET_ROOT/voidlog"
+GLIBC_FLOOR="${BETTERSTRAP_VOIDLOG_GLIBC:-2.17}"
 
 case "$RID" in
   linux-x64) TRIPLE=x86_64-unknown-linux-gnu; FILE=libvoidlog.so ;;
@@ -36,7 +36,7 @@ case "$TRIPLE" in
 esac
 
 BUILD_TARGET="$TRIPLE"
-ZIGBUILD_HOME="${XDG_CACHE_HOME:-$HOME/.cache}/voidstrap/zigbuild"
+ZIGBUILD_HOME="${XDG_CACHE_HOME:-$HOME/.cache}/betterstrap/zigbuild"
 [ -x "$ZIGBUILD_HOME/bin/cargo-zigbuild" ] && PATH="$ZIGBUILD_HOME/bin:$PATH"
 
 if [ "$(uname -s)" = "Linux" ] && command -v cargo-zigbuild >/dev/null 2>&1 && { command -v zig >/dev/null 2>&1 || "$(dirname "$(command -v cargo-zigbuild)")/python" -c "import ziglang" >/dev/null 2>&1 || python3 -c "import ziglang" >/dev/null 2>&1; }; then

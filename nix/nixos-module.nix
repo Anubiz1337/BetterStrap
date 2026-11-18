@@ -7,31 +7,31 @@ self:
 }:
 
 let
-  cfg = config.programs.voidstrap;
-  desktopEntry = "io.github.KloBraticc.Voidstrap.desktop";
+  cfg = config.programs.betterstrap;
+  desktopEntry = "io.github.KloBraticc.BetterStrap.desktop";
   schemes = [
     "x-scheme-handler/roblox"
     "x-scheme-handler/roblox-player"
     "x-scheme-handler/roblox-studio"
     "x-scheme-handler/roblox-studio-auth"
-    "x-scheme-handler/voidstrap"
+    "x-scheme-handler/betterstrap"
   ];
 in
 {
-  options.programs.voidstrap = {
-    enable = lib.mkEnableOption "Voidstrap, a Roblox bootstrapper that launches Roblox through Sober";
+  options.programs.betterstrap = {
+    enable = lib.mkEnableOption "BetterStrap, a Roblox bootstrapper that launches Roblox through Sober";
 
     package = lib.mkOption {
       type = lib.types.package;
-      default = self.packages.${pkgs.stdenv.hostPlatform.system}.voidstrap;
-      defaultText = lib.literalExpression "voidstrap.packages.\${pkgs.stdenv.hostPlatform.system}.voidstrap";
-      description = "The Voidstrap package to install.";
+      default = self.packages.${pkgs.stdenv.hostPlatform.system}.betterstrap;
+      defaultText = lib.literalExpression "betterstrap.packages.\${pkgs.stdenv.hostPlatform.system}.betterstrap";
+      description = "The BetterStrap package to install.";
     };
 
     openRobloxLinks = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Open roblox:// and voidstrap:// links from the browser with Voidstrap.";
+      description = "Open roblox:// and betterstrap:// links from the browser with BetterStrap.";
     };
   };
 

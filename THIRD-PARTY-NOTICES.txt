@@ -1,10 +1,10 @@
-# Voidstrap licenses and third party notices
+# BetterStrap licenses and third party notices
 
-Voidstrap code is licensed under MIT. Bundled dependencies and assets keep their own terms. This inventory covers the desktop and Android distributions, including transitive dependencies and platform-specific components. An entry does not mean that every target includes that component.
+BetterStrap code is licensed under MIT. Bundled dependencies and assets keep their own terms. This inventory covers the desktop and Android distributions, including transitive dependencies and platform-specific components. An entry does not mean that every target includes that component.
 
-Bibata cursor source and build files accompany releases in Bibata-Cursor-v2.0.7.tar.gz. They are also available at https://github.com/KloBraticc/Voidstrap/tree/main/legal/sources and https://github.com/ful1e5/Bibata_Cursor/tree/v2.0.7. Voidstrap ships PNG adaptations of the cursor artwork. The PNG files and the upstream editable SVG source retain GPLv3 terms. Twemoji artwork was adapted into Voidstrap Emoji by build/Packaging/Linux/build-emoji-font.py and retains CC BY 4.0 attribution and terms.
+Bibata cursor source and build files accompany releases in Bibata-Cursor-v2.0.7.tar.gz. They are also available at https://github.com/KloBraticc/BetterStrap/tree/main/legal/sources and https://github.com/ful1e5/Bibata_Cursor/tree/v2.0.7. BetterStrap ships PNG adaptations of the cursor artwork. The PNG files and the upstream editable SVG source retain GPLv3 terms. Twemoji artwork was adapted into BetterStrap Emoji by build/Packaging/Linux/build-emoji-font.py and retains CC BY 4.0 attribution and terms.
 
-Google Play libraries keep their publisher terms. They are not licensed under Voidstrap's MIT license.
+Google Play libraries keep their publisher terms. They are not licensed under BetterStrap's MIT license.
 
 ## Components
 
@@ -46,7 +46,7 @@ Google Play libraries keep their publisher terms. They are not licensed under Vo
 
 - Inter font bundled (asset)
   Terms: OFL-1.1
-  Source: src/Voidstrap.App/Resources/Fonts/OFL-Inter.txt
+  Source: src/BetterStrap.App/Resources/Fonts/OFL-Inter.txt
 
 - License - Fira Code bundled (asset)
   Terms: See included license
@@ -62,11 +62,11 @@ Google Play libraries keep their publisher terms. They are not licensed under Vo
 
 - Montserrat font bundled (asset)
   Terms: OFL-1.1
-  Source: src/Voidstrap.App/Resources/Fonts/OFL-Montserrat.txt
+  Source: src/BetterStrap.App/Resources/Fonts/OFL-Montserrat.txt
 
 - NotoSansThai font bundled (asset)
   Terms: OFL-1.1
-  Source: src/Voidstrap.App/Resources/Fonts/OFL-NotoSansThai.txt
+  Source: src/BetterStrap.App/Resources/Fonts/OFL-NotoSansThai.txt
 
 - Nvidia Profile Inspector attributed code (asset)
   Terms: MIT
@@ -82,11 +82,11 @@ Google Play libraries keep their publisher terms. They are not licensed under Vo
 
 - Rubik font bundled (asset)
   Terms: OFL-1.1
-  Source: src/Voidstrap.App/Resources/Fonts/OFL-Rubik.txt
+  Source: src/BetterStrap.App/Resources/Fonts/OFL-Rubik.txt
 
 - Selawik font bundled (asset)
   Terms: OFL-1.1
-  Source: src/Voidstrap.App/Resources/Fonts/OFL-Selawik.txt
+  Source: src/BetterStrap.App/Resources/Fonts/OFL-Selawik.txt
 
 - Twemoji Mozilla bundled (asset)
   Terms: CC-BY-4.0 artwork and Apache-2.0 tooling
@@ -100,9 +100,9 @@ Google Play libraries keep their publisher terms. They are not licensed under Vo
   Terms: MIT
   Source: https://github.com/OMouta/Unishade
 
-- Voidstrap bundled (asset)
+- BetterStrap bundled (asset)
   Terms: MIT
-  Source: https://github.com/KloBraticc/Voidstrap
+  Source: https://github.com/KloBraticc/BetterStrap
 
 - WPF UI bundled (asset)
   Terms: MIT
@@ -1826,8 +1826,8 @@ DEALINGS IN THE SOFTWARE.
 
 ### Notice 3
 
-Voidstrap bundled
-Origin: LICENSE.VOIDSTRAP
+BetterStrap bundled
+Origin: LICENSE.BETTERSTRAP
 
 
 MIT License
@@ -1856,7 +1856,7 @@ SOFTWARE.
 ### Notice 4
 
 Montserrat font bundled
-Origin: src/Voidstrap.App/Resources/Fonts/OFL-Montserrat.txt
+Origin: src/BetterStrap.App/Resources/Fonts/OFL-Montserrat.txt
 
 
 Copyright 2011 The Montserrat Project Authors (https://github.com/JulietaUla/Montserrat)
@@ -10704,7 +10704,7 @@ SOFTWARE.
 ### Notice 41
 
 Inter font bundled
-Origin: src/Voidstrap.App/Resources/Fonts/OFL-Inter.txt
+Origin: src/BetterStrap.App/Resources/Fonts/OFL-Inter.txt
 
 
 Copyright 2020 The Inter Project Authors (https://github.com/rsms/inter)
@@ -11111,7 +11111,7 @@ SOFTWARE.
 ### Notice 46
 
 Rubik font bundled
-Origin: src/Voidstrap.App/Resources/Fonts/OFL-Rubik.txt
+Origin: src/BetterStrap.App/Resources/Fonts/OFL-Rubik.txt
 
 
 Copyright 2015 The Rubik Project Authors (https://github.com/googlefonts/rubik)
@@ -14128,7 +14128,7 @@ claim pixel-identical Segoe artwork.
 ### Notice 67
 
 Twemoji Mozilla bundled
-Origin: src/Voidstrap.App/Resources/Fonts/LICENSE-TwemojiMozilla.txt
+Origin: src/BetterStrap.App/Resources/Fonts/LICENSE-TwemojiMozilla.txt
 
 
 ## License for the Code
@@ -17869,7 +17869,7 @@ END OF Sergio0694/ComputeSharp NOTICES AND INFORMATION
 ### Notice 84
 
 Selawik font bundled
-Origin: src/Voidstrap.App/Resources/Fonts/OFL-Selawik.txt
+Origin: src/BetterStrap.App/Resources/Fonts/OFL-Selawik.txt
 
 
 Copyright 2015, Microsoft Corporation (www.microsoft.com), with Reserved Font Name Selawik.  All Rights Reserved.  Selawik is a trademark of Microsoft Corporation in the United States and/or other countries.
@@ -20032,7 +20032,7 @@ Android Software Development Kit License
 This component is distributed under the publisher terms at:
 https://developer.android.com/studio/terms.html
 
-This component is not covered by Voidstrap's MIT license.
+This component is not covered by BetterStrap's MIT license.
 
 
 ### Notice 107
@@ -20066,7 +20066,7 @@ Play Core Software Development Kit Terms of Service
 This component is distributed under the publisher terms at:
 https://developer.android.com/guide/playcore/license
 
-This component is not covered by Voidstrap's MIT license.
+This component is not covered by BetterStrap's MIT license.
 
 
 ### Notice 109
@@ -54721,7 +54721,7 @@ AndroidX annotation jvm library:
 ### Notice 135
 
 NotoSansThai font bundled
-Origin: src/Voidstrap.App/Resources/Fonts/OFL-NotoSansThai.txt
+Origin: src/BetterStrap.App/Resources/Fonts/OFL-NotoSansThai.txt
 
 
 Copyright 2022 The Noto Project Authors (https://github.com/notofonts/thai)
@@ -60473,7 +60473,7 @@ SPDX-License-Identifier: Unicode-3.0
 ### Notice 150
 
 Bibata Modern Ice bundled
-Origin: src/Voidstrap.App/Resources/Mods/Cursor/BibataModernIce/LICENSE.txt
+Origin: src/BetterStrap.App/Resources/Mods/Cursor/BibataModernIce/LICENSE.txt
 
 
                     GNU GENERAL PUBLIC LICENSE

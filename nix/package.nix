@@ -67,25 +67,25 @@ let
   ];
 in
 buildDotnetModule (finalAttrs: {
-  pname = "voidstrap";
+  pname = "betterstrap";
   version = "1.1.3.7";
 
   src = fetchFromGitHub {
     owner = "KloBraticc";
-    repo = "Voidstrap";
+    repo = "BetterStrap";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-YQvMuL//uUuFKGaOMfuDWNHAfnHx1s0BjgzGfVLweug=";
   };
 
-  projectFile = "src/Voidstrap.Cross/Voidstrap.Cross.csproj";
+  projectFile = "src/BetterStrap.Cross/BetterStrap.Cross.csproj";
   nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = null;
   selfContainedBuild = true;
 
-  executables = [ "Voidstrap" ];
+  executables = [ "BetterStrap" ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
   buildInputs = [ (lib.getLib stdenv.cc.cc) ] ++ runtimeLibraries;
@@ -93,7 +93,7 @@ buildDotnetModule (finalAttrs: {
   autoPatchelfIgnoreMissingDeps = [ "*" ];
 
   preConfigure = ''
-    dotnetFlags+=("-p:VoidstrapLinuxPackagingRoot=$PWD/.nix-artifacts/")
+    dotnetFlags+=("-p:BetterStrapLinuxPackagingRoot=$PWD/.nix-artifacts/")
   '';
 
   dotnetBuildFlags = [ "-p:VoidImageLibrary=${finalAttrs.passthru.voidimage}/lib/libvoidimage.so" ];
@@ -106,28 +106,28 @@ buildDotnetModule (finalAttrs: {
   ];
 
   env = {
-    VOIDSTRAP_VOIDIMAGE_NO_ZIG = "1";
-    VOIDSTRAP_EDITOR_COMPILER = "${stdenv.cc}/bin/cc";
+    BETTERSTRAP_VOIDIMAGE_NO_ZIG = "1";
+    BETTERSTRAP_EDITOR_COMPILER = "${stdenv.cc}/bin/cc";
   };
 
   postInstall = ''
     for library in uc i18n data; do
-      if [ -e $out/lib/voidstrap/libicu$library.so.72.1.0.3 ]; then
-        ln -s libicu$library.so.72.1.0.3 $out/lib/voidstrap/libicu$library.so.72
+      if [ -e $out/lib/betterstrap/libicu$library.so.72.1.0.3 ]; then
+        ln -s libicu$library.so.72.1.0.3 $out/lib/betterstrap/libicu$library.so.72
       fi
     done
-    install -Dm644 build/Packaging/Linux/voidstrap.desktop \
-      $out/share/applications/io.github.KloBraticc.Voidstrap.desktop
-    substituteInPlace $out/share/applications/io.github.KloBraticc.Voidstrap.desktop \
-      --replace-fail "Exec=voidstrap" "Exec=$out/bin/voidstrap"
-    install -Dm644 src/Voidstrap.App/Voidstrap.png \
-      $out/share/icons/hicolor/256x256/apps/io.github.KloBraticc.Voidstrap.png
-    install -Dm644 build/Packaging/Linux/io.github.KloBraticc.Voidstrap.metainfo.xml \
-      $out/share/metainfo/io.github.KloBraticc.Voidstrap.metainfo.xml
+    install -Dm644 build/Packaging/Linux/betterstrap.desktop \
+      $out/share/applications/io.github.KloBraticc.BetterStrap.desktop
+    substituteInPlace $out/share/applications/io.github.KloBraticc.BetterStrap.desktop \
+      --replace-fail "Exec=betterstrap" "Exec=$out/bin/betterstrap"
+    install -Dm644 src/BetterStrap.App/BetterStrap.png \
+      $out/share/icons/hicolor/256x256/apps/io.github.KloBraticc.BetterStrap.png
+    install -Dm644 build/Packaging/Linux/io.github.KloBraticc.BetterStrap.metainfo.xml \
+      $out/share/metainfo/io.github.KloBraticc.BetterStrap.metainfo.xml
   '';
 
   postFixup = ''
-    ln -s Voidstrap $out/bin/voidstrap
+    ln -s BetterStrap $out/bin/betterstrap
   '';
 
   passthru = {
@@ -144,10 +144,10 @@ buildDotnetModule (finalAttrs: {
 
   meta = {
     description = "Roblox bootstrapper that launches Roblox through Sober on Linux";
-    homepage = "https://github.com/KloBraticc/Voidstrap";
-    changelog = "https://github.com/KloBraticc/Voidstrap/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/KloBraticc/BetterStrap";
+    changelog = "https://github.com/KloBraticc/BetterStrap/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    mainProgram = "voidstrap";
+    mainProgram = "betterstrap";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

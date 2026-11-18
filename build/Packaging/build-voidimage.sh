@@ -4,8 +4,8 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 RID="${1:?A runtime identifier is required}"
 OUTPUT="${2:?An output library is required}"
 TARGET_DIR="${3:-$ROOT/native/voidimage/target}"
-[ -n "${VOIDSTRAP_NATIVE_TARGET_ROOT:-}" ] && TARGET_DIR="$VOIDSTRAP_NATIVE_TARGET_ROOT/voidimage"
-GLIBC_FLOOR="${VOIDSTRAP_VOIDIMAGE_GLIBC:-2.17}"
+[ -n "${BETTERSTRAP_NATIVE_TARGET_ROOT:-}" ] && TARGET_DIR="$BETTERSTRAP_NATIVE_TARGET_ROOT/voidimage"
+GLIBC_FLOOR="${BETTERSTRAP_VOIDIMAGE_GLIBC:-2.17}"
 
 case "$RID" in
   linux-x64) TRIPLE=x86_64-unknown-linux-gnu; FILE=libvoidimage.so ;;
@@ -36,8 +36,8 @@ case "$TRIPLE" in
 esac
 
 BUILD_TARGET="$TRIPLE"
-ZIGBUILD_HOME="${XDG_CACHE_HOME:-$HOME/.cache}/voidstrap/zigbuild"
-if [ "$(uname -s)" = "Linux" ] && [ "${VOIDSTRAP_VOIDIMAGE_NO_ZIG:-0}" != 1 ] && ! { [ -x "$ZIGBUILD_HOME/bin/cargo-zigbuild" ] && "$ZIGBUILD_HOME/bin/cargo-zigbuild" --version >/dev/null 2>&1 && "$ZIGBUILD_HOME/bin/python" -c "import ziglang" >/dev/null 2>&1; }; then
+ZIGBUILD_HOME="${XDG_CACHE_HOME:-$HOME/.cache}/betterstrap/zigbuild"
+if [ "$(uname -s)" = "Linux" ] && [ "${BETTERSTRAP_VOIDIMAGE_NO_ZIG:-0}" != 1 ] && ! { [ -x "$ZIGBUILD_HOME/bin/cargo-zigbuild" ] && "$ZIGBUILD_HOME/bin/cargo-zigbuild" --version >/dev/null 2>&1 && "$ZIGBUILD_HOME/bin/python" -c "import ziglang" >/dev/null 2>&1; }; then
   rm -rf "$ZIGBUILD_HOME"
   if python3 -m venv "$ZIGBUILD_HOME" >/dev/null 2>&1 && "$ZIGBUILD_HOME/bin/python" -m pip install --quiet --disable-pip-version-check ziglang==0.17.0 cargo-zigbuild==0.23.4 >/dev/null 2>&1; then
     echo "voidimage: prepared cargo-zigbuild for old glibc and musl builds"

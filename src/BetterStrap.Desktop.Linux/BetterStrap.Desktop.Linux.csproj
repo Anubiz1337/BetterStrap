@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>latest</LangVersion>
+		<RootNamespace>BetterStrap.Desktop.Linux</RootNamespace>
+		<AssemblyName>BetterStrap</AssemblyName>
+		<RuntimeIdentifiers>linux-x64;linux-arm64;linux-musl-x64;linux-musl-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Avalonia.Wayland" Version="12.1.6" />
+		<ProjectReference Include="..\BetterStrap.Desktop\BetterStrap.Desktop.csproj" />
+		<ProjectReference Include="..\BetterStrap.Platform.Linux\BetterStrap.Platform.Linux.csproj" />
+	</ItemGroup>
+</Project>

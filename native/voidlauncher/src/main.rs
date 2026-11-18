@@ -21,9 +21,9 @@ use windows_sys::Win32::UI::WindowsAndMessaging::{MessageBoxW, IDYES, MB_ICONERR
 
 const PAYLOAD_ID: u16 = 101;
 const RT_RCDATA: u16 = 10;
-const PAYLOAD_DIR: &str = env!("VOIDSTRAP_PAYLOAD_DIR");
-const DOTNET_MAJOR: &str = env!("VOIDSTRAP_DOTNET_MAJOR");
-const PAYLOAD_LEN: &str = env!("VOIDSTRAP_PAYLOAD_LEN");
+const PAYLOAD_DIR: &str = env!("BETTERSTRAP_PAYLOAD_DIR");
+const DOTNET_MAJOR: &str = env!("BETTERSTRAP_DOTNET_MAJOR");
+const PAYLOAD_LEN: &str = env!("BETTERSTRAP_PAYLOAD_LEN");
 const STD_INPUT_HANDLE: u32 = -10i32 as u32;
 const STD_OUTPUT_HANDLE: u32 = -11i32 as u32;
 const STD_ERROR_HANDLE: u32 = -12i32 as u32;
@@ -67,7 +67,7 @@ fn main() -> ExitCode {
     if !arguments.is_empty() {
         command.raw_arg(arguments);
     }
-    command.env("VOIDSTRAP_LAUNCHER", &launcher);
+    command.env("BETTERSTRAP_LAUNCHER", &launcher);
     if console_mode || quiet {
         return match command.status() {
             Ok(status) => ExitCode::from(status.code().unwrap_or(1) as u8),
@@ -123,7 +123,7 @@ fn wide(text: &OsStr) -> Vec<u16> {
 
 fn show(message: &str, flags: u32) -> i32 {
     let text = wide(OsStr::new(message));
-    let title = wide(OsStr::new("Voidstrap"));
+    let title = wide(OsStr::new("BetterStrap"));
     unsafe { MessageBoxW(null_mut(), text.as_ptr(), title.as_ptr(), flags) }
 }
 
@@ -254,14 +254,14 @@ fn payload() -> Option<&'static [u8]> {
 
 fn unpack() -> Option<PathBuf> {
     let bytes = payload()?;
-    let base = Path::new(&env::var_os("LOCALAPPDATA")?).join("Voidstrap").join("Bin");
+    let base = Path::new(&env::var_os("LOCALAPPDATA")?).join("BetterStrap").join("Bin");
     let directory = base.join(PAYLOAD_DIR);
-    let app = directory.join("Voidstrap.exe");
+    let app = directory.join("BetterStrap.exe");
     let expected_len: u64 = PAYLOAD_LEN.parse().unwrap_or(0);
     let check_len = if expected_len > 0 { expected_len } else { bytes.len() as u64 };
     if !fs::metadata(&app).map(|meta| meta.len() == check_len).unwrap_or(false) {
         fs::create_dir_all(&directory).ok()?;
-        let temporary = directory.join(format!("Voidstrap.{}.tmp", std::process::id()));
+        let temporary = directory.join(format!("BetterStrap.{}.tmp", std::process::id()));
         let mut write_bytes = Vec::with_capacity(check_len as usize);
         lzma_rust2::XzReader::new(bytes, false).read_to_end(&mut write_bytes).ok()?;
         if write_bytes.len() as u64 != check_len {

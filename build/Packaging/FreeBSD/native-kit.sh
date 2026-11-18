@@ -25,11 +25,11 @@ for library in voidimage voidclip voidrpc voidlog voidstate; do
   bash "$ROOT/build/Packaging/build-$library.sh" "$RID" "$OUTPUT/native/lib$library.so"
   test -s "$OUTPUT/native/lib$library.so" || { echo "lib$library.so was not built"; exit 1; }
 done
-bash "$ROOT/build/Packaging/Linux/build-native-compat.sh" "$RID" "$OUTPUT/native/libvoidstrapeditorcompat.so"
+bash "$ROOT/build/Packaging/Linux/build-native-compat.sh" "$RID" "$OUTPUT/native/libbetterstrapeditorcompat.so"
 
 SDK_VERSION="$(sed -n 's/.*"LibreWPF.Sdk":[[:space:]]*"\([^"]*\)".*/\1/p' "$ROOT/global.json")"
 [ -n "$SDK_VERSION" ] || { echo "The LibreWPF.Sdk version is missing from global.json"; exit 1; }
-WORK="$(mktemp -d "${TMPDIR:-/tmp}/voidstrap-kit.XXXXXX")"
+WORK="$(mktemp -d "${TMPDIR:-/tmp}/betterstrap-kit.XXXXXX")"
 trap 'rm -rf "$WORK"' EXIT
 fetch -q -o "$WORK/sdk.nupkg" "https://api.nuget.org/v3-flatcontainer/librewpf.sdk/$SDK_VERSION/librewpf.sdk.$SDK_VERSION.nupkg"
 tar -xf "$WORK/sdk.nupkg" -C "$WORK" targets/ProGPU.Wpf.Sdk.Win32Compat.c

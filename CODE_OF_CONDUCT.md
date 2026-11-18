@@ -2,9 +2,9 @@
 
 ## Our pledge
 
-Voidstrap should be a welcoming place to ask questions, report problems, and contribute. Everyone deserves respectful treatment, regardless of age, background, identity, ability, or experience.
+BetterStrap should be a welcoming place to ask questions, report problems, and contribute. Everyone deserves respectful treatment, regardless of age, background, identity, ability, or experience.
 
-By participating in the repository or the Voidstrap Discord server, you agree to follow this Code of Conduct.
+By participating in the repository or the BetterStrap Discord server, you agree to follow this Code of Conduct.
 
 ## Expected behavior
 
@@ -25,14 +25,14 @@ By participating in the repository or the Voidstrap Discord server, you agree to
 
 ## Scope
 
-This Code of Conduct applies to Voidstrap's GitHub issues, pull requests, reviews, discussions, and Discord server. It also applies when someone represents the project in another community or public space.
+This Code of Conduct applies to BetterStrap's GitHub issues, pull requests, reviews, discussions, and Discord server. It also applies when someone represents the project in another community or public space.
 
 ## Reporting
 
 If you experience or witness unacceptable behavior, report it privately:
 
-* **Discord:** send a direct message to a Voidstrap staff member on the [Discord server](https://discord.gg/5tJBqBH8ck).
-* **GitHub:** use **Report content** in the item's menu to report a violation to GitHub. This is GitHub's reporting process; it does not replace contacting Voidstrap staff about project moderation.
+* **Discord:** send a direct message to a BetterStrap staff member on the [Discord server](https://discord.gg/5tJBqBH8ck).
+* **GitHub:** use **Report content** in the item's menu to report a violation to GitHub. This is GitHub's reporting process; it does not replace contacting BetterStrap staff about project moderation.
 
 Include what happened, where it happened, and when. Links or screenshots can help, but do not publish sensitive information or confront the person publicly to gather evidence.
 
@@ -42,7 +42,7 @@ For a software vulnerability, follow the separate [security policy](SECURITY.md)
 
 ## Enforcement
 
-Voidstrap maintainers and Discord staff review reports and choose a response based on the behavior, its impact, and any previous incidents. Responses may include:
+BetterStrap maintainers and Discord staff review reports and choose a response based on the behavior, its impact, and any previous incidents. Responses may include:
 
 1. A request to stop the behavior or correct a contribution.
 2. A private warning that explains the problem and expected change.

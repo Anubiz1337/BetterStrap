@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>latest</LangVersion>
+		<RootNamespace>BetterStrap.Core</RootNamespace>
+		<AssemblyName>BetterStrap.Core</AssemblyName>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\BetterStrap.Platform.Abstractions\BetterStrap.Platform.Abstractions.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="..\BetterStrap.App\Models\Persistable\AppSettings.cs" LogicalName="Catalog/AppSettings.cs" Visible="false" />
+		<EmbeddedResource Include="..\BetterStrap.App\UI\Elements\Settings\SearchCatalog.cs" LogicalName="Catalog/SearchCatalog.cs" Visible="false" />
+		<EmbeddedResource Include="..\BetterStrap.App\UI\Elements\Settings\Pages\*.xaml" LogicalName="Catalog/Pages/%(Filename)%(Extension)" Visible="false" />
+	</ItemGroup>
+</Project>

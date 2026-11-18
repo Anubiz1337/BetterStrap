@@ -33,7 +33,7 @@ fi
 TARGET_ARGS=()
 TARGET_ROOT="${CARGO_TARGET_DIR:-target}"
 LIBRARY="$TARGET_ROOT/release/libwgpu_native.so"
-COMPILER="${VOIDSTRAP_NATIVE_COMPILER:-}"
+COMPILER="${BETTERSTRAP_NATIVE_COMPILER:-}"
 case "$RID" in
     linux-x64) COMPILER="${COMPILER:-cc}" ;;
     freebsd-x64|freebsd.*-x64) [ "$(uname -s)" = "FreeBSD" ] || { echo "freebsd-x64 is only built on FreeBSD" >&2; exit 1; }; COMPILER="${COMPILER:-cc}" ;;
@@ -43,7 +43,7 @@ case "$RID" in
     *) echo "Unsupported runtime: $RID" >&2; exit 1 ;;
 esac
 if ! command -v "$COMPILER" > /dev/null; then
-    echo "Compiler not found: $COMPILER. Set VOIDSTRAP_NATIVE_COMPILER to a compiler for $RID." >&2
+    echo "Compiler not found: $COMPILER. Set BETTERSTRAP_NATIVE_COMPILER to a compiler for $RID." >&2
     exit 1
 fi
 if [[ -n "${TARGET:-}" ]]; then

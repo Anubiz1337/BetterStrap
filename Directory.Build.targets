@@ -2,10 +2,10 @@
 
 	<Target Name="InvalidateStaleVersionMetadata" BeforeTargets="CoreGenerateAssemblyInfo" Condition="'$(GenerateAssemblyInfo)' == 'true' And Exists('$(GeneratedAssemblyInfoFile)')">
 		<PropertyGroup>
-			<_VoidstrapVersionMetadataStale>!$([System.IO.File]::ReadAllText('$(GeneratedAssemblyInfoFile)').Contains('AssemblyFileVersionAttribute(&quot;$(FileVersion)&quot;)'))</_VoidstrapVersionMetadataStale>
+			<_BetterStrapVersionMetadataStale>!$([System.IO.File]::ReadAllText('$(GeneratedAssemblyInfoFile)').Contains('AssemblyFileVersionAttribute(&quot;$(FileVersion)&quot;)'))</_BetterStrapVersionMetadataStale>
 		</PropertyGroup>
-		<Delete Files="$(GeneratedAssemblyInfoFile);@(IntermediateAssembly)" Condition="$(_VoidstrapVersionMetadataStale)" />
-		<Delete Files="$(AppHostIntermediatePath);$(TargetDir)$(TargetName)$(_NativeExecutableExtension)" Condition="$(_VoidstrapVersionMetadataStale) And '$(UseAppHost)' == 'true'" />
+		<Delete Files="$(GeneratedAssemblyInfoFile);@(IntermediateAssembly)" Condition="$(_BetterStrapVersionMetadataStale)" />
+		<Delete Files="$(AppHostIntermediatePath);$(TargetDir)$(TargetName)$(_NativeExecutableExtension)" Condition="$(_BetterStrapVersionMetadataStale) And '$(UseAppHost)' == 'true'" />
 	</Target>
 
 	<PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Full'">
@@ -19,40 +19,40 @@
 		<Compile Remove="obj-*/**/*AssemblyAttributes.cs" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux')) And '$(VoidstrapLinuxPackagingRoot)' != ''">
+	<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux')) And '$(BetterStrapLinuxPackagingRoot)' != ''">
 		<ProGpuWpfEnableWin32CompatShim>false</ProGpuWpfEnableWin32CompatShim>
 	</PropertyGroup>
 
-	<Target Name="BuildLinuxWin32Compatibility" BeforeTargets="CoreCompile" Condition="(($(RuntimeIdentifier.StartsWith('linux')) Or $(RuntimeIdentifier.StartsWith('freebsd'))) And ($([MSBuild]::IsOSPlatform('Linux')) Or $([MSBuild]::IsOSPlatform('FreeBSD'))) And '$(ProGpuWpfUsePortableFrameworkReferences)' == 'true' And Exists('$(_ProGpuWpfWin32CompatSource)')) Or ('$(VoidstrapFreeBSDNativeDirectory)' != '' And '$(ProGpuWpfUsePortableFrameworkReferences)' == 'true')">
+	<Target Name="BuildLinuxWin32Compatibility" BeforeTargets="CoreCompile" Condition="(($(RuntimeIdentifier.StartsWith('linux')) Or $(RuntimeIdentifier.StartsWith('freebsd'))) And ($([MSBuild]::IsOSPlatform('Linux')) Or $([MSBuild]::IsOSPlatform('FreeBSD'))) And '$(ProGpuWpfUsePortableFrameworkReferences)' == 'true' And Exists('$(_ProGpuWpfWin32CompatSource)')) Or ('$(BetterStrapFreeBSDNativeDirectory)' != '' And '$(ProGpuWpfUsePortableFrameworkReferences)' == 'true')">
 		<PropertyGroup>
-			<_VoidstrapWin32CompatDirectory>$(BaseIntermediateOutputPath)win32compat/$(RuntimeIdentifier)/</_VoidstrapWin32CompatDirectory>
-			<_VoidstrapWin32CompatLibrary>$(_VoidstrapWin32CompatDirectory)libwin32compat.so</_VoidstrapWin32CompatLibrary>
-			<_VoidstrapWin32CompatLibrary Condition="'$(VoidstrapFreeBSDNativeDirectory)' != ''">$(VoidstrapFreeBSDNativeDirectory)libwin32compat.so</_VoidstrapWin32CompatLibrary>
+			<_BetterStrapWin32CompatDirectory>$(BaseIntermediateOutputPath)win32compat/$(RuntimeIdentifier)/</_BetterStrapWin32CompatDirectory>
+			<_BetterStrapWin32CompatLibrary>$(_BetterStrapWin32CompatDirectory)libwin32compat.so</_BetterStrapWin32CompatLibrary>
+			<_BetterStrapWin32CompatLibrary Condition="'$(BetterStrapFreeBSDNativeDirectory)' != ''">$(BetterStrapFreeBSDNativeDirectory)libwin32compat.so</_BetterStrapWin32CompatLibrary>
 		</PropertyGroup>
-		<Error Condition="'$(VoidstrapFreeBSDNativeDirectory)' != '' And !Exists('$(_VoidstrapWin32CompatLibrary)')" Text="libwin32compat.so is missing from $(VoidstrapFreeBSDNativeDirectory)" />
-		<Exec Condition="'$(VoidstrapFreeBSDNativeDirectory)' == ''" Command="bash &quot;$(MSBuildThisFileDirectory)build/Packaging/Linux/build-native-compat.sh&quot; &quot;$(RuntimeIdentifier)&quot; &quot;$(_VoidstrapWin32CompatLibrary)&quot; &quot;$(_ProGpuWpfWin32CompatSource)&quot;" />
+		<Error Condition="'$(BetterStrapFreeBSDNativeDirectory)' != '' And !Exists('$(_BetterStrapWin32CompatLibrary)')" Text="libwin32compat.so is missing from $(BetterStrapFreeBSDNativeDirectory)" />
+		<Exec Condition="'$(BetterStrapFreeBSDNativeDirectory)' == ''" Command="bash &quot;$(MSBuildThisFileDirectory)build/Packaging/Linux/build-native-compat.sh&quot; &quot;$(RuntimeIdentifier)&quot; &quot;$(_BetterStrapWin32CompatLibrary)&quot; &quot;$(_ProGpuWpfWin32CompatSource)&quot;" />
 		<ItemGroup>
-			<_VoidstrapWin32CompatAlias Include="kernel32.dll.so;libkernel32.dll.so;user32.dll.so;libuser32.dll.so;gdi32.dll.so;libgdi32.dll.so;dwmapi.dll.so;libdwmapi.dll.so;uxtheme.dll.so;libuxtheme.dll.so;shell32.dll.so;libshell32.dll.so;gdiplus.dll.so;libgdiplus.dll.so;comdlg32.dll.so;libcomdlg32.dll.so" />
+			<_BetterStrapWin32CompatAlias Include="kernel32.dll.so;libkernel32.dll.so;user32.dll.so;libuser32.dll.so;gdi32.dll.so;libgdi32.dll.so;dwmapi.dll.so;libdwmapi.dll.so;uxtheme.dll.so;libuxtheme.dll.so;shell32.dll.so;libshell32.dll.so;gdiplus.dll.so;libgdiplus.dll.so;comdlg32.dll.so;libcomdlg32.dll.so" />
 		</ItemGroup>
-		<Copy SourceFiles="@(_VoidstrapWin32CompatAlias->'$(_VoidstrapWin32CompatLibrary)')" DestinationFiles="@(_VoidstrapWin32CompatAlias->'$(TargetDir)%(Identity)')" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(_BetterStrapWin32CompatAlias->'$(_BetterStrapWin32CompatLibrary)')" DestinationFiles="@(_BetterStrapWin32CompatAlias->'$(TargetDir)%(Identity)')" SkipUnchangedFiles="true" />
 	</Target>
 
 
-	<ItemGroup Condition="('$(OutputType)' == 'Exe' Or '$(OutputType)' == 'WinExe') And '$(MSBuildProjectName)' != 'Voidstrap' And !$(RuntimeIdentifier.StartsWith('win'))">
+	<ItemGroup Condition="('$(OutputType)' == 'Exe' Or '$(OutputType)' == 'WinExe') And '$(MSBuildProjectName)' != 'BetterStrap' And !$(RuntimeIdentifier.StartsWith('win'))">
 		<Content Include="$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.txt" Link="licenses/THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
 		<Content Include="$(MSBuildThisFileDirectory)legal/sources/*.tar.gz" Link="licenses/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(MSBuildProjectName)' == 'Voidstrap.Cross'">
-		<EmbeddedResource Include="$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.txt" LogicalName="Voidstrap.Licenses.Notices" />
+	<ItemGroup Condition="'$(MSBuildProjectName)' == 'BetterStrap.Cross'">
+		<EmbeddedResource Include="$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.txt" LogicalName="BetterStrap.Licenses.Notices" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(MSBuildProjectName)' == 'Voidstrap'">
-		<EmbeddedResource Include="$(IntermediateOutputPath)license-notices/THIRD-PARTY-NOTICES.txt.br" LogicalName="Voidstrap.Licenses.Notices.br" />
-		<EmbeddedResource Include="$(MSBuildThisFileDirectory)legal/sources/*.tar.gz" LogicalName="Voidstrap.Licenses.%(Filename)%(Extension)" />
+	<ItemGroup Condition="'$(MSBuildProjectName)' == 'BetterStrap'">
+		<EmbeddedResource Include="$(IntermediateOutputPath)license-notices/THIRD-PARTY-NOTICES.txt.br" LogicalName="BetterStrap.Licenses.Notices.br" />
+		<EmbeddedResource Include="$(MSBuildThisFileDirectory)legal/sources/*.tar.gz" LogicalName="BetterStrap.Licenses.%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<UsingTask TaskName="CompressVoidstrapLicenseNotices" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+	<UsingTask TaskName="CompressBetterStrapLicenseNotices" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
 		<ParameterGroup>
 			<Source ParameterType="System.String" Required="true" />
 			<Destination ParameterType="System.String" Required="true" />
@@ -71,19 +71,19 @@
 		</Task>
 	</UsingTask>
 
-	<Target Name="BuildCompressedLicenseNotices" BeforeTargets="AssignTargetPaths" Condition="'$(MSBuildProjectName)' == 'Voidstrap'" Inputs="$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.txt;$(MSBuildThisFileFullPath)" Outputs="$(IntermediateOutputPath)license-notices/THIRD-PARTY-NOTICES.txt.br">
-		<CompressVoidstrapLicenseNotices Source="$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.txt" Destination="$(IntermediateOutputPath)license-notices/THIRD-PARTY-NOTICES.txt.br" />
+	<Target Name="BuildCompressedLicenseNotices" BeforeTargets="AssignTargetPaths" Condition="'$(MSBuildProjectName)' == 'BetterStrap'" Inputs="$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.txt;$(MSBuildThisFileFullPath)" Outputs="$(IntermediateOutputPath)license-notices/THIRD-PARTY-NOTICES.txt.br">
+		<CompressBetterStrapLicenseNotices Source="$(MSBuildThisFileDirectory)THIRD-PARTY-NOTICES.txt" Destination="$(IntermediateOutputPath)license-notices/THIRD-PARTY-NOTICES.txt.br" />
 		<ItemGroup>
 			<FileWrites Include="$(IntermediateOutputPath)license-notices/THIRD-PARTY-NOTICES.txt.br" />
 		</ItemGroup>
 	</Target>
 
-	<Target Name="RemoveWindowsLicenseSidecars" BeforeTargets="CopyFilesToOutputDirectory;Publish" Condition="'$(MSBuildProjectName)' == 'Voidstrap'">
+	<Target Name="RemoveWindowsLicenseSidecars" BeforeTargets="CopyFilesToOutputDirectory;Publish" Condition="'$(MSBuildProjectName)' == 'BetterStrap'">
 		<RemoveDir Directories="$(OutDir)licenses" Condition="'$(OutDir)' != ''" />
 		<RemoveDir Directories="$(PublishDir)licenses" Condition="'$(PublishDir)' != ''" />
 	</Target>
 
-	<UsingTask TaskName="PackVoidstrapAppSource" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+	<UsingTask TaskName="PackBetterStrapAppSource" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
 		<ParameterGroup>
 			<SourceRoot ParameterType="System.String" Required="true" />
 			<OutputFile ParameterType="System.String" Required="true" />
@@ -145,26 +145,26 @@
 		</Task>
 	</UsingTask>
 
-	<ItemGroup Condition="('$(MSBuildProjectName)' == 'Voidstrap' Or '$(MSBuildProjectName)' == 'Voidstrap.Cross') And ('$(IncludeAppSource)' == 'true' Or '$(Configuration)' == 'Debug')">
+	<ItemGroup Condition="('$(MSBuildProjectName)' == 'BetterStrap' Or '$(MSBuildProjectName)' == 'BetterStrap.Cross') And ('$(IncludeAppSource)' == 'true' Or '$(Configuration)' == 'Debug')">
 		<AppSourceInputs Include="$(MSBuildThisFileDirectory)src/**/*.cs;$(MSBuildThisFileDirectory)src/**/*.xaml;$(MSBuildThisFileDirectory)src/**/*.csproj;$(MSBuildThisFileDirectory)src/**/*.props;$(MSBuildThisFileDirectory)src/**/*.targets"
 			Exclude="$(MSBuildThisFileDirectory)src/**/obj/**;$(MSBuildThisFileDirectory)src/**/bin/**;$(MSBuildThisFileDirectory)src/**/obj-*/**;$(MSBuildThisFileDirectory)src/**/bin-*/**;$(MSBuildThisFileDirectory)src/**/*.g.cs;$(MSBuildThisFileDirectory)src/**/*.g.i.cs" />
 	</ItemGroup>
 
-	<Target Name="PackVoidstrapAppSourceArchive" BeforeTargets="AssignTargetPaths" Condition="('$(MSBuildProjectName)' == 'Voidstrap' Or '$(MSBuildProjectName)' == 'Voidstrap.Cross') And ('$(IncludeAppSource)' == 'true' Or '$(Configuration)' == 'Debug')"
+	<Target Name="PackBetterStrapAppSourceArchive" BeforeTargets="AssignTargetPaths" Condition="('$(MSBuildProjectName)' == 'BetterStrap' Or '$(MSBuildProjectName)' == 'BetterStrap.Cross') And ('$(IncludeAppSource)' == 'true' Or '$(Configuration)' == 'Debug')"
 		Inputs="@(AppSourceInputs);$(MSBuildThisFileFullPath)"
-		Outputs="$(IntermediateOutputPath)app-source/Voidstrap.AppSource.br">
+		Outputs="$(IntermediateOutputPath)app-source/BetterStrap.AppSource.br">
 		<PropertyGroup>
 			<AppSourceBrotliLevel Condition="'$(Configuration)' == 'Debug'">0</AppSourceBrotliLevel>
 			<AppSourceBrotliLevel Condition="'$(Configuration)' != 'Debug'">3</AppSourceBrotliLevel>
 		</PropertyGroup>
-		<PackVoidstrapAppSource SourceRoot="$(MSBuildThisFileDirectory)src" OutputFile="$(IntermediateOutputPath)app-source/Voidstrap.AppSource.br" Level="$(AppSourceBrotliLevel)" />
+		<PackBetterStrapAppSource SourceRoot="$(MSBuildThisFileDirectory)src" OutputFile="$(IntermediateOutputPath)app-source/BetterStrap.AppSource.br" Level="$(AppSourceBrotliLevel)" />
 		<ItemGroup>
-			<FileWrites Include="$(IntermediateOutputPath)app-source/Voidstrap.AppSource.br" />
+			<FileWrites Include="$(IntermediateOutputPath)app-source/BetterStrap.AppSource.br" />
 		</ItemGroup>
 	</Target>
 
-	<ItemGroup Condition="('$(MSBuildProjectName)' == 'Voidstrap' Or '$(MSBuildProjectName)' == 'Voidstrap.Cross') And ('$(IncludeAppSource)' == 'true' Or '$(Configuration)' == 'Debug')">
-		<EmbeddedResource Include="$(IntermediateOutputPath)app-source/Voidstrap.AppSource.br" LogicalName="Voidstrap.AppSource.br" />
+	<ItemGroup Condition="('$(MSBuildProjectName)' == 'BetterStrap' Or '$(MSBuildProjectName)' == 'BetterStrap.Cross') And ('$(IncludeAppSource)' == 'true' Or '$(Configuration)' == 'Debug')">
+		<EmbeddedResource Include="$(IntermediateOutputPath)app-source/BetterStrap.AppSource.br" LogicalName="BetterStrap.AppSource.br" />
 	</ItemGroup>
 
 </Project>

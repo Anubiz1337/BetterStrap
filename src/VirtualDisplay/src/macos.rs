@@ -115,7 +115,7 @@ unsafe extern "C" {
 #[link(name = "Foundation", kind = "framework")]
 unsafe extern "C" {}
 
-const DISPLAY_NAME: &CStr = c"Voidstrap Virtual Display";
+const DISPLAY_NAME: &CStr = c"BetterStrap Virtual Display";
 const POLL_SECONDS: f64 = 0.05;
 const MODE_RETRY: Duration = Duration::from_secs(2);
 
@@ -600,7 +600,7 @@ fn run_inner(config: Config) -> Result<(), String> {
         return Ok(());
     }
     let lock_path = std::env::temp_dir()
-        .join(format!("voidstrap-virtualdisplay-{}.lock", unsafe {
+        .join(format!("betterstrap-virtualdisplay-{}.lock", unsafe {
             libc::getuid()
         }));
     let lock = OpenOptions::new()

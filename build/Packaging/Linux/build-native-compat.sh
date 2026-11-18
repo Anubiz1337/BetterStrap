@@ -15,11 +15,11 @@ esac
 HOST_ARCH="$(uname -m)"
 [ "$HOST_ARCH" = "amd64" ] && HOST_ARCH=x86_64
 if [ "$ARCH" = "$HOST_ARCH" ]; then
-  COMPILER="${VOIDSTRAP_EDITOR_COMPILER:-cc}"
+  COMPILER="${BETTERSTRAP_EDITOR_COMPILER:-cc}"
 elif [ "$ARCH" = "aarch64" ]; then
-  COMPILER="${VOIDSTRAP_EDITOR_COMPILER:-aarch64-linux-gnu-gcc}"
+  COMPILER="${BETTERSTRAP_EDITOR_COMPILER:-aarch64-linux-gnu-gcc}"
 else
-  COMPILER="${VOIDSTRAP_EDITOR_COMPILER:-x86_64-linux-gnu-gcc}"
+  COMPILER="${BETTERSTRAP_EDITOR_COMPILER:-x86_64-linux-gnu-gcc}"
 fi
 command -v "$COMPILER" >/dev/null 2>&1 || { echo "The $ARCH C compiler is unavailable" >&2; exit 1; }
 mkdir -p "$(dirname "$OUTPUT")"

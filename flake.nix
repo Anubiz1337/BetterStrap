@@ -1,5 +1,5 @@
 {
-  description = "Voidstrap, a Roblox bootstrapper that launches Roblox through Sober on Linux";
+  description = "BetterStrap, a Roblox bootstrapper that launches Roblox through Sober on Linux";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.self.submodules = true;
@@ -13,33 +13,33 @@
       ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
       version = builtins.head (
-        builtins.elemAt (builtins.split "<VoidstrapVersion>([0-9.]+)</VoidstrapVersion>" (builtins.readFile ./Directory.Build.props)) 1
+        builtins.elemAt (builtins.split "<BetterStrapVersion>([0-9.]+)</BetterStrapVersion>" (builtins.readFile ./Directory.Build.props)) 1
       );
     in
     {
       packages = forAllSystems (pkgs: rec {
-        voidstrap = pkgs.callPackage ./nix/package.nix { };
-        voidstrap-git = voidstrap.overrideAttrs {
+        betterstrap = pkgs.callPackage ./nix/package.nix { };
+        betterstrap-git = betterstrap.overrideAttrs {
           inherit version;
           src = self;
         };
-        default = voidstrap;
+        default = betterstrap;
       });
 
       nixosModules.default = import ./nix/nixos-module.nix self;
-      nixosModules.voidstrap = self.nixosModules.default;
+      nixosModules.betterstrap = self.nixosModules.default;
 
       homeModules.default = import ./nix/home-module.nix self;
-      homeModules.voidstrap = self.homeModules.default;
+      homeModules.betterstrap = self.homeModules.default;
       homeManagerModules = self.homeModules;
 
       overlays.default = final: prev: {
-        voidstrap = self.packages.${final.stdenv.hostPlatform.system}.voidstrap;
+        betterstrap = self.packages.${final.stdenv.hostPlatform.system}.betterstrap;
       };
 
       devShells = forAllSystems (pkgs: {
         default = pkgs.mkShell {
-          inputsFrom = [ self.packages.${pkgs.stdenv.hostPlatform.system}.voidstrap-git ];
+          inputsFrom = [ self.packages.${pkgs.stdenv.hostPlatform.system}.betterstrap-git ];
           packages = [
             pkgs.cargo
             pkgs.rustc

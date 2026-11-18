@@ -1,0 +1,43 @@
+{
+    "profiles": {
+        "BetterStrap (Launch)": {
+            "commandName": "Project"
+        },
+        "BetterStrap (Quiet Launch)": {
+            "commandName": "Project",
+            "commandLineArgs": "-quiet"
+        },
+        "BetterStrap (Install)": {
+            "commandName": "Project",
+            "commandLineArgs": "-install"
+        },
+        "BetterStrap (Uninstall)": {
+            "commandName": "Project",
+            "commandLineArgs": "-uninstall"
+        },
+        "BetterStrap (Quiet Uninstall)": {
+            "commandName": "Project",
+            "commandLineArgs": "-uninstall -quiet"
+        },
+        "BetterStrap (Menu)": {
+            "commandName": "Project",
+            "commandLineArgs": "-menu"
+        },
+        "BetterStrap (Deeplink)": {
+            "commandName": "Project",
+            "commandLineArgs": "-player \"roblox://experiences/start?placeId=286090429\""
+        },
+        "BetterStrap (Studio Launch)": {
+            "commandName": "Project",
+            "commandLineArgs": "-studio"
+        },
+        "BetterStrap (Watcher)": {
+            "commandName": "Project",
+            "commandLineArgs": "-watcher"
+        },
+        "BetterStrap (Bloxshade)": {
+            "commandName": "Project",
+            "commandLineArgs": "-bloxshade"
+        }
+    }
+}

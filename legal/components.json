@@ -8,7 +8,7 @@
     "documents": [
       {
         "path": "texts/fe92c7ac268ce17193b9.txt",
-        "source": "src/Voidstrap.App/Resources/Mods/Cursor/BibataModernIce/LICENSE.txt"
+        "source": "src/BetterStrap.App/Resources/Mods/Cursor/BibataModernIce/LICENSE.txt"
       }
     ]
   },
@@ -82,11 +82,11 @@
     "name": "Inter font",
     "version": "bundled",
     "license": "OFL-1.1",
-    "source": "src/Voidstrap.App/Resources/Fonts/OFL-Inter.txt",
+    "source": "src/BetterStrap.App/Resources/Fonts/OFL-Inter.txt",
     "documents": [
       {
         "path": "texts/40dfe0003dcd0bbde5a5.txt",
-        "source": "src/Voidstrap.App/Resources/Fonts/OFL-Inter.txt"
+        "source": "src/BetterStrap.App/Resources/Fonts/OFL-Inter.txt"
       }
     ]
   },
@@ -134,11 +134,11 @@
     "name": "Montserrat font",
     "version": "bundled",
     "license": "OFL-1.1",
-    "source": "src/Voidstrap.App/Resources/Fonts/OFL-Montserrat.txt",
+    "source": "src/BetterStrap.App/Resources/Fonts/OFL-Montserrat.txt",
     "documents": [
       {
         "path": "texts/0548ef093968e0109181.txt",
-        "source": "src/Voidstrap.App/Resources/Fonts/OFL-Montserrat.txt"
+        "source": "src/BetterStrap.App/Resources/Fonts/OFL-Montserrat.txt"
       }
     ]
   },
@@ -147,11 +147,11 @@
     "name": "NotoSansThai font",
     "version": "bundled",
     "license": "OFL-1.1",
-    "source": "src/Voidstrap.App/Resources/Fonts/OFL-NotoSansThai.txt",
+    "source": "src/BetterStrap.App/Resources/Fonts/OFL-NotoSansThai.txt",
     "documents": [
       {
         "path": "texts/dad6e6abc2bf3fc37cc6.txt",
-        "source": "src/Voidstrap.App/Resources/Fonts/OFL-NotoSansThai.txt"
+        "source": "src/BetterStrap.App/Resources/Fonts/OFL-NotoSansThai.txt"
       }
     ]
   },
@@ -186,11 +186,11 @@
     "name": "Rubik font",
     "version": "bundled",
     "license": "OFL-1.1",
-    "source": "src/Voidstrap.App/Resources/Fonts/OFL-Rubik.txt",
+    "source": "src/BetterStrap.App/Resources/Fonts/OFL-Rubik.txt",
     "documents": [
       {
         "path": "texts/472cbe7c25441df63e9c.txt",
-        "source": "src/Voidstrap.App/Resources/Fonts/OFL-Rubik.txt"
+        "source": "src/BetterStrap.App/Resources/Fonts/OFL-Rubik.txt"
       }
     ]
   },
@@ -199,11 +199,11 @@
     "name": "Selawik font",
     "version": "bundled",
     "license": "OFL-1.1",
-    "source": "src/Voidstrap.App/Resources/Fonts/OFL-Selawik.txt",
+    "source": "src/BetterStrap.App/Resources/Fonts/OFL-Selawik.txt",
     "documents": [
       {
         "path": "texts/77b7c2506d4efb22e09c.txt",
-        "source": "src/Voidstrap.App/Resources/Fonts/OFL-Selawik.txt"
+        "source": "src/BetterStrap.App/Resources/Fonts/OFL-Selawik.txt"
       }
     ]
   },
@@ -216,7 +216,7 @@
     "documents": [
       {
         "path": "texts/64419edc28e9163204c3.txt",
-        "source": "src/Voidstrap.App/Resources/Fonts/LICENSE-TwemojiMozilla.txt"
+        "source": "src/BetterStrap.App/Resources/Fonts/LICENSE-TwemojiMozilla.txt"
       }
     ]
   },
@@ -235,14 +235,14 @@
   },
   {
     "ecosystem": "asset",
-    "name": "Voidstrap",
+    "name": "BetterStrap",
     "version": "bundled",
     "license": "MIT",
-    "source": "https://github.com/KloBraticc/Voidstrap",
+    "source": "https://github.com/KloBraticc/BetterStrap",
     "documents": [
       {
         "path": "texts/03df6453b86351a6eb94.txt",
-        "source": "LICENSE.VOIDSTRAP"
+        "source": "LICENSE.BETTERSTRAP"
       }
     ]
   },

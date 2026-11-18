@@ -1,7 +1,7 @@
 ﻿<Project>
 
 	<PropertyGroup>
-		<VoidstrapVersion>2.0.0.0</VoidstrapVersion>
+		<BetterStrapVersion>2.0.0.0</BetterStrapVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -15,24 +15,24 @@
 		<GenerateDocumentationFile>false</GenerateDocumentationFile>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(VoidstrapLinuxPackagingRoot)' != ''">
-		<BaseOutputPath>$(VoidstrapLinuxPackagingRoot)bin/$(MSBuildProjectName)/</BaseOutputPath>
-		<BaseIntermediateOutputPath>$(VoidstrapLinuxPackagingRoot)obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+	<PropertyGroup Condition="'$(BetterStrapLinuxPackagingRoot)' != ''">
+		<BaseOutputPath>$(BetterStrapLinuxPackagingRoot)bin/$(MSBuildProjectName)/</BaseOutputPath>
+		<BaseIntermediateOutputPath>$(BetterStrapLinuxPackagingRoot)obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
 		<DefaultItemExcludes>$(DefaultItemExcludes);bin/**;bin-*/**;bin-cross/**;obj/**;obj-*/**</DefaultItemExcludes>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(VoidstrapLinuxPackagingRoot)' != '' And $(MSBuildProjectName.StartsWith('Voidstrap.Cross'))">
-		<BaseOutputPath>$(VoidstrapLinuxPackagingRoot)bin/Voidstrap.Cross/</BaseOutputPath>
-		<BaseIntermediateOutputPath>$(VoidstrapLinuxPackagingRoot)obj/Voidstrap.Cross/</BaseIntermediateOutputPath>
+	<PropertyGroup Condition="'$(BetterStrapLinuxPackagingRoot)' != '' And $(MSBuildProjectName.StartsWith('BetterStrap.Cross'))">
+		<BaseOutputPath>$(BetterStrapLinuxPackagingRoot)bin/BetterStrap.Cross/</BaseOutputPath>
+		<BaseIntermediateOutputPath>$(BetterStrapLinuxPackagingRoot)obj/BetterStrap.Cross/</BaseIntermediateOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('freebsd')) And !$([MSBuild]::IsOSPlatform('FreeBSD'))">
-		<VoidstrapFreeBSDNativeDirectory Condition="'$(VoidstrapFreeBSDNativeDirectory)' == ''">$(MSBuildThisFileDirectory)external/LibreWPF/freebsd-x64/</VoidstrapFreeBSDNativeDirectory>
-		<VoidstrapFreeBSDNativeDirectory>$([MSBuild]::EnsureTrailingSlash('$(VoidstrapFreeBSDNativeDirectory)'))</VoidstrapFreeBSDNativeDirectory>
+		<BetterStrapFreeBSDNativeDirectory Condition="'$(BetterStrapFreeBSDNativeDirectory)' == ''">$(MSBuildThisFileDirectory)external/LibreWPF/freebsd-x64/</BetterStrapFreeBSDNativeDirectory>
+		<BetterStrapFreeBSDNativeDirectory>$([MSBuild]::EnsureTrailingSlash('$(BetterStrapFreeBSDNativeDirectory)'))</BetterStrapFreeBSDNativeDirectory>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version Condition="'$(Version)' == ''">$(VoidstrapVersion)</Version>
+		<Version Condition="'$(Version)' == ''">$(BetterStrapVersion)</Version>
 		<FileVersion>$(Version)</FileVersion>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<InformationalVersion>$(Version)</InformationalVersion>

@@ -91,9 +91,9 @@ $LinuxOut  = Join-Path $Out 'Linux'
 $MacOut    = Join-Path $Out 'macOS'
 $FreeBSDOut = Join-Path $Out 'FreeBSD'
 $ArtifactDir = [System.IO.Path]::GetFullPath((Join-Path $Root 'artifacts/publish'))
-$WinProj   = [System.IO.Path]::GetFullPath((Join-Path $Root 'src/Voidstrap.App/Voidstrap.csproj'))
-$CrossProj = [System.IO.Path]::GetFullPath((Join-Path $Root 'src/Voidstrap.Cross/Voidstrap.Cross.csproj'))
-$Sln       = [System.IO.Path]::GetFullPath((Join-Path $Root 'Voidstrap.sln'))
+$WinProj   = [System.IO.Path]::GetFullPath((Join-Path $Root 'src/BetterStrap.App/BetterStrap.csproj'))
+$CrossProj = [System.IO.Path]::GetFullPath((Join-Path $Root 'src/BetterStrap.Cross/BetterStrap.Cross.csproj'))
+$Sln       = [System.IO.Path]::GetFullPath((Join-Path $Root 'BetterStrap.sln'))
 $IsLinuxHost = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Linux)
 $LinuxPackagingTools = @('dpkg-deb', 'rpmbuild', 'flatpak', 'flatpak-builder')
 
@@ -328,10 +328,10 @@ function Get-MissingAndroidSigningProperties {
     param([Parameter(Mandatory)] [string]$GradlePropertiesPath)
 
     $signingProperties = @(
-        'voidstrap.storeFile',
-        'voidstrap.storePassword',
-        'voidstrap.keyAlias',
-        'voidstrap.keyPassword'
+        'betterstrap.storeFile',
+        'betterstrap.storePassword',
+        'betterstrap.keyAlias',
+        'betterstrap.keyPassword'
     )
     $declared = if (Test-Path -LiteralPath $GradlePropertiesPath -PathType Leaf) {
         Get-Content -LiteralPath $GradlePropertiesPath
@@ -460,19 +460,19 @@ function Complete-AndroidPublish {
         if ((Get-Item -LiteralPath $built).Length -lt 1048576) {
             throw "The $flavour release APK is unexpectedly small."
         }
-        $published = Join-Path $androidOutput "Voidstrap-Android-$flavour-$Version.apk"
+        $published = Join-Path $androidOutput "BetterStrap-Android-$flavour-$Version.apk"
         Copy-Item -LiteralPath $built -Destination $published -Force
         Write-Host "  $([System.IO.Path]::GetFileName($published))" -ForegroundColor Green
     }
 
     $builtBundle = Join-Path $androidRoot "app/build/outputs/bundle/playRelease/app-play-release.aab"
     if (Test-Path -LiteralPath $builtBundle -PathType Leaf) {
-        $publishedBundle = Join-Path $androidOutput "Voidstrap-Android-play-$Version.aab"
+        $publishedBundle = Join-Path $androidOutput "BetterStrap-Android-play-$Version.aab"
         Copy-Item -LiteralPath $builtBundle -Destination $publishedBundle -Force
         Write-Host "  $([System.IO.Path]::GetFileName($publishedBundle))" -ForegroundColor Green
     }
 
-    Assert-AndroidFlavourSplit (Join-Path $androidOutput "Voidstrap-Android-play-$Version.apk")
+    Assert-AndroidFlavourSplit (Join-Path $androidOutput "BetterStrap-Android-play-$Version.apk")
 }
 
 function Assert-AndroidFlavourSplit {
@@ -558,7 +558,7 @@ function Resolve-AppImageTool {
     } else {
         Join-Path ([Environment]::GetFolderPath([Environment+SpecialFolder]::UserProfile)) '.cache'
     }
-    $toolDirectory = Join-Path $cacheBase "voidstrap/build-tools/appimagetool/$toolVersion"
+    $toolDirectory = Join-Path $cacheBase "betterstrap/build-tools/appimagetool/$toolVersion"
     $toolPath = Join-Path $toolDirectory "appimagetool-$toolArchitecture.AppImage"
     $toolValid = (Test-Path -LiteralPath $toolPath -PathType Leaf) -and
         [string]::Equals((Get-FileHash -LiteralPath $toolPath -Algorithm SHA256).Hash, $expectedHash, [System.StringComparison]::OrdinalIgnoreCase)
@@ -859,7 +859,7 @@ function Get-PackageFiles {
 function Test-PackageCache {
     param([Parameter(Mandatory)] $Job)
 
-    if ($Clean -or $env:MACOS_SIGN_IDENTITY -or $env:MACOS_NOTARY_PROFILE -or $env:VOIDSTRAP_APPIMAGE_SYSROOT -or $env:VOIDSTRAP_APPIMAGE_SYSROOT_DIR) {
+    if ($Clean -or $env:MACOS_SIGN_IDENTITY -or $env:MACOS_NOTARY_PROFILE -or $env:BETTERSTRAP_APPIMAGE_SYSROOT -or $env:BETTERSTRAP_APPIMAGE_SYSROOT_DIR) {
         return $false
     }
     $stampPath = Join-Path (Join-Path $ArtifactDir $Job.Target.Key) 'packages.json'
@@ -1151,20 +1151,20 @@ function Invoke-WindowsLauncherBuild {
     $payloadDir = Join-Path $launcherRoot 'payload'
     $targetDir = Join-Path $launcherRoot 'target'
     [System.IO.Directory]::CreateDirectory($payloadDir) | Out-Null
-    $payload = Join-Path $payloadDir 'Voidstrap.exe'
+    $payload = Join-Path $payloadDir 'BetterStrap.exe'
     Move-Item -LiteralPath $Job.Expected -Destination $payload -Force
 
-    $env:VOIDSTRAP_LAUNCHER_PAYLOAD = $payload
-    $env:VOIDSTRAP_VERSION = Get-VoidstrapVersion
+    $env:BETTERSTRAP_LAUNCHER_PAYLOAD = $payload
+    $env:BETTERSTRAP_VERSION = Get-BetterStrapVersion
     try {
         & $cargo build --release --locked --quiet --target x86_64-pc-windows-msvc --manifest-path (Join-Path $Root 'native/voidlauncher/Cargo.toml') --target-dir $targetDir
         if ($LASTEXITCODE -ne 0) { throw "cargo exited with code $LASTEXITCODE" }
     } finally {
-        Remove-Item Env:VOIDSTRAP_LAUNCHER_PAYLOAD -ErrorAction SilentlyContinue
-        Remove-Item Env:VOIDSTRAP_VERSION -ErrorAction SilentlyContinue
+        Remove-Item Env:BETTERSTRAP_LAUNCHER_PAYLOAD -ErrorAction SilentlyContinue
+        Remove-Item Env:BETTERSTRAP_VERSION -ErrorAction SilentlyContinue
     }
 
-    $built = Join-Path $targetDir 'x86_64-pc-windows-msvc/release/Voidstrap.exe'
+    $built = Join-Path $targetDir 'x86_64-pc-windows-msvc/release/BetterStrap.exe'
     if (-not (Test-Path -LiteralPath $built -PathType Leaf)) { throw 'cargo did not produce the launcher' }
     Copy-Item -LiteralPath $built -Destination $Job.Expected -Force
     Get-ChildItem -LiteralPath $Job.Target.OutDir -Filter '*.lib' -File -ErrorAction SilentlyContinue | Remove-Item -Force
@@ -1262,14 +1262,14 @@ function Show-PublishFailure {
     Write-Host ''
 }
 
-function Get-VoidstrapVersion {
+function Get-BetterStrapVersion {
     $props = Join-Path $Root 'Directory.Build.props'
     if (-not (Test-Path -LiteralPath $props -PathType Leaf)) {
         throw "Directory.Build.props was not found: $props"
     }
-    $match = [regex]::Match((Get-Content -Raw -LiteralPath $props), '<VoidstrapVersion>([^<]+)</VoidstrapVersion>')
+    $match = [regex]::Match((Get-Content -Raw -LiteralPath $props), '<BetterStrapVersion>([^<]+)</BetterStrapVersion>')
     if (-not $match.Success) {
-        throw 'The Voidstrap package version is unavailable.'
+        throw 'The BetterStrap package version is unavailable.'
     }
     return $match.Groups[1].Value
 }
@@ -1284,8 +1284,8 @@ function Resolve-SignPathSource {
     }
 
     $origin = (& git -C $Root remote get-url origin 2>$null | Out-String).Trim()
-    if ($LASTEXITCODE -ne 0 -or $origin -notmatch '(?i)github\.com[:/]KloBraticc/Voidstrap(?:\.git)?\z') {
-        throw 'SignPath requires the repository origin to be KloBraticc/Voidstrap on GitHub.'
+    if ($LASTEXITCODE -ne 0 -or $origin -notmatch '(?i)github\.com[:/]KloBraticc/BetterStrap(?:\.git)?\z') {
+        throw 'SignPath requires the repository origin to be KloBraticc/BetterStrap on GitHub.'
     }
 
     $status = @(& git -C $Root status --porcelain --untracked-files=all)
@@ -1341,9 +1341,9 @@ function Invoke-SignPathWindows {
     $ghPath = $Context.GhPath
 
     $requestId = [guid]::NewGuid().ToString('N')
-    $runName = "Sign Voidstrap $Version $requestId"
+    $runName = "Sign BetterStrap $Version $requestId"
     Write-Host "  Requesting trusted GitHub signing for commit $head..." -ForegroundColor DarkGray
-    & $ghPath workflow run windows-release-signing.yml --repo KloBraticc/Voidstrap --ref main -f "commit=$head" -f "version=$Version" -f "request-id=$requestId" 2>&1 | Out-Null
+    & $ghPath workflow run windows-release-signing.yml --repo KloBraticc/BetterStrap --ref main -f "commit=$head" -f "version=$Version" -f "request-id=$requestId" 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
         throw 'GitHub Actions could not start the SignPath signing workflow. Check GitHub CLI authentication and workflow availability.'
     }
@@ -1351,7 +1351,7 @@ function Invoke-SignPathWindows {
     $runId = $null
     $findDeadline = [DateTime]::UtcNow.AddMinutes(2)
     while (-not $runId -and [DateTime]::UtcNow -lt $findDeadline) {
-        $runsJson = & $ghPath run list --repo KloBraticc/Voidstrap --workflow windows-release-signing.yml --event workflow_dispatch --limit 20 --json databaseId,name 2>&1 | Out-String
+        $runsJson = & $ghPath run list --repo KloBraticc/BetterStrap --workflow windows-release-signing.yml --event workflow_dispatch --limit 20 --json databaseId,name 2>&1 | Out-String
         if ($LASTEXITCODE -ne 0) {
             throw 'GitHub Actions did not return the signing workflow run.'
         }
@@ -1367,9 +1367,9 @@ function Invoke-SignPathWindows {
     $signingRun = $null
     $signingDeadline = [DateTime]::UtcNow.AddHours(1)
     $lastProgressAt = [DateTime]::UtcNow
-    Write-Host "  Waiting for the GitHub build and SignPath signature: https://github.com/KloBraticc/Voidstrap/actions/runs/$runId" -ForegroundColor DarkGray
+    Write-Host "  Waiting for the GitHub build and SignPath signature: https://github.com/KloBraticc/BetterStrap/actions/runs/$runId" -ForegroundColor DarkGray
     while ([DateTime]::UtcNow -lt $signingDeadline) {
-        $runJson = & $ghPath run view $runId --repo KloBraticc/Voidstrap --json status,conclusion 2>&1 | Out-String
+        $runJson = & $ghPath run view $runId --repo KloBraticc/BetterStrap --json status,conclusion 2>&1 | Out-String
         if ($LASTEXITCODE -ne 0) {
             throw 'GitHub Actions did not return the status of the signing run.'
         }
@@ -1381,7 +1381,7 @@ function Invoke-SignPathWindows {
         }
         Start-Sleep -Seconds 10
     }
-    $runUrl = "https://github.com/KloBraticc/Voidstrap/actions/runs/$runId"
+    $runUrl = "https://github.com/KloBraticc/BetterStrap/actions/runs/$runId"
     if (-not $signingRun -or $signingRun.status -ne 'completed') {
         throw "SignPath signing run did not finish within one hour: $runUrl"
     }
@@ -1395,21 +1395,21 @@ function Invoke-SignPathWindows {
     }
     New-Item -ItemType Directory -Path $downloadDir -Force | Out-Null
     try {
-        & $ghPath run download $runId --repo KloBraticc/Voidstrap --name "voidstrap-windows-signed-$Version" --dir $downloadDir
+        & $ghPath run download $runId --repo KloBraticc/BetterStrap --name "betterstrap-windows-signed-$Version" --dir $downloadDir
         if ($LASTEXITCODE -ne 0) {
             throw 'GitHub Actions could not download the signed Windows executable.'
         }
 
         $downloadedFiles = @(Get-ChildItem -LiteralPath $downloadDir -File -Force)
         $downloadedDirectories = @(Get-ChildItem -LiteralPath $downloadDir -Directory -Force)
-        if ($downloadedDirectories.Count -ne 0 -or $downloadedFiles.Count -ne 1 -or $downloadedFiles[0].Name -cne 'Voidstrap.exe') {
-            throw 'The signing run did not return exactly one Voidstrap.exe file.'
+        if ($downloadedDirectories.Count -ne 0 -or $downloadedFiles.Count -ne 1 -or $downloadedFiles[0].Name -cne 'BetterStrap.exe') {
+            throw 'The signing run did not return exactly one BetterStrap.exe file.'
         }
 
         $signedExe = $downloadedFiles[0].FullName
         $info = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($signedExe)
-        if ($info.ProductName -ne 'Voidstrap' -or $info.ProductVersion -ne $Version -or $info.CompanyName -ne 'Voidstrap' -or $info.OriginalFilename -ne 'Voidstrap.dll' -or $info.FileVersion -ne $Version) {
-            throw "Unexpected signed Voidstrap metadata: ProductName='$($info.ProductName)', CompanyName='$($info.CompanyName)', OriginalFilename='$($info.OriginalFilename)', ProductVersion='$($info.ProductVersion)', FileVersion='$($info.FileVersion)'."
+        if ($info.ProductName -ne 'BetterStrap' -or $info.ProductVersion -ne $Version -or $info.CompanyName -ne 'BetterStrap' -or $info.OriginalFilename -ne 'BetterStrap.dll' -or $info.FileVersion -ne $Version) {
+            throw "Unexpected signed BetterStrap metadata: ProductName='$($info.ProductName)', CompanyName='$($info.CompanyName)', OriginalFilename='$($info.OriginalFilename)', ProductVersion='$($info.ProductVersion)', FileVersion='$($info.FileVersion)'."
         }
         $signature = Get-AuthenticodeSignature -LiteralPath $signedExe
         if ($null -eq $signature.SignerCertificate) {
@@ -1425,7 +1425,7 @@ function Invoke-SignPathWindows {
         if ((Get-FileHash -LiteralPath $OutputPath -Algorithm SHA256).Hash -ne $signedHash) {
             throw 'The signed executable changed while being copied into the publish output.'
         }
-        Write-Host '  Voidstrap.exe: signed by the trusted GitHub Actions build.' -ForegroundColor Green
+        Write-Host '  BetterStrap.exe: signed by the trusted GitHub Actions build.' -ForegroundColor Green
     }
     finally {
         Remove-BuildDirectory -Path $downloadDir
@@ -1457,7 +1457,7 @@ function Test-FreeBSDKit {
     if (-not (Test-Path -LiteralPath $keyFile -PathType Leaf)) { return $false }
     if ((Get-Content -LiteralPath $keyFile -Raw).Trim() -cne $Key) { return $false }
     if (-not (Test-Path -LiteralPath (Join-Path $Path 'runtime-version.txt') -PathType Leaf)) { return $false }
-    foreach ($library in @('libwgpu_native.so', 'libglfw.so.3', 'libvoidimage.so', 'libvoidclip.so', 'libvoidrpc.so', 'libvoidlog.so', 'libvoidstate.so', 'libvoidstrapeditorcompat.so', 'libwin32compat.so')) {
+    foreach ($library in @('libwgpu_native.so', 'libglfw.so.3', 'libvoidimage.so', 'libvoidclip.so', 'libvoidrpc.so', 'libvoidlog.so', 'libvoidstate.so', 'libbetterstrapeditorcompat.so', 'libwin32compat.so')) {
         if (-not (Test-Path -LiteralPath (Join-Path $Path "native/$library") -PathType Leaf)) { return $false }
     }
     return @(Get-ChildItem -LiteralPath (Join-Path $Path 'feed') -File -Filter '*.nupkg' -ErrorAction SilentlyContinue).Count -eq 3
@@ -1504,12 +1504,12 @@ function Start-FreeBSDKit {
     if ($LASTEXITCODE -ne 0 -or -not $owner) {
         throw 'The FreeBSD native libraries need a signed in GitHub CLI, run: gh auth login'
     }
-    $repo = "$owner/voidstrap-freebsd"
+    $repo = "$owner/betterstrap-freebsd"
 
     & $ghPath repo view $repo --json name 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
         Write-Host "  Creating $repo for FreeBSD builds..." -ForegroundColor DarkGray
-        & $ghPath repo create $repo --public --description 'FreeBSD builds of Voidstrap' 2>&1 | Out-Null
+        & $ghPath repo create $repo --public --description 'FreeBSD builds of BetterStrap' 2>&1 | Out-Null
         if ($LASTEXITCODE -ne 0) {
             throw "GitHub could not create $repo."
         }
@@ -1536,12 +1536,12 @@ function Start-FreeBSDKit {
     }
 
     Write-Host "  FreeBSD native libraries changed, sending the source to $repo..." -ForegroundColor DarkGray
-    & $git.Source -C $Root -c credential.helper= -c 'credential.https://github.com.helper=!gh auth git-credential' push --force --quiet "https://github.com/$repo.git" "${commit}:refs/voidstrap/build" 2>&1 | Out-Null
+    & $git.Source -C $Root -c credential.helper= -c 'credential.https://github.com.helper=!gh auth git-credential' push --force --quiet "https://github.com/$repo.git" "${commit}:refs/betterstrap/build" 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
         throw "Git could not push the source to $repo."
     }
 
-    $request = "Voidstrap FreeBSD $([guid]::NewGuid().ToString('N'))"
+    $request = "BetterStrap FreeBSD $([guid]::NewGuid().ToString('N'))"
     $dispatchDeadline = [DateTime]::UtcNow.AddMinutes(1)
     while ($true) {
         & $ghPath workflow run build.yml --repo $repo -f "commit=$commit" -f "request=$request" 2>&1 | Out-Null
@@ -1616,7 +1616,7 @@ function Complete-FreeBSDKit {
     $downloadDir = Join-Path $ArtifactDir "freebsd-kit-$runId"
     Remove-BuildDirectory -Path $downloadDir
     New-Item -ItemType Directory -Path $downloadDir -Force | Out-Null
-    & $ghPath run download $runId --repo $repo --name voidstrap-freebsd-kit --dir $downloadDir
+    & $ghPath run download $runId --repo $repo --name betterstrap-freebsd-kit --dir $downloadDir
     if ($LASTEXITCODE -ne 0) {
         Remove-BuildDirectory -Path $downloadDir
         throw "GitHub Actions could not download the FreeBSD native libraries: $runUrl"
@@ -1635,7 +1635,7 @@ function Complete-FreeBSDKit {
 function Get-LatestReleaseVersion {
     try {
         [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-        $release = Invoke-RestMethod -Uri 'https://api.github.com/repos/KloBraticc/Voidstrap/releases/latest' -TimeoutSec 20 -UseBasicParsing
+        $release = Invoke-RestMethod -Uri 'https://api.github.com/repos/KloBraticc/BetterStrap/releases/latest' -TimeoutSec 20 -UseBasicParsing
         return ([string]$release.tag_name) -replace '^v', ''
     } catch {
         return $null
@@ -1667,7 +1667,7 @@ function Update-NixPackage {
     }
 
     Write-Host "Nix package: updating $current to $latest, this builds the release in Docker" -ForegroundColor Cyan
-    $workDir = Join-Path ([System.IO.Path]::GetTempPath()) ('voidstrap-nix-' + [guid]::NewGuid().ToString('N'))
+    $workDir = Join-Path ([System.IO.Path]::GetTempPath()) ('betterstrap-nix-' + [guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Force -Path $workDir | Out-Null
     $log = Join-Path $ArtifactDir 'nix.log'
     New-Item -ItemType Directory -Force -Path $ArtifactDir | Out-Null
@@ -1680,15 +1680,15 @@ function Update-NixPackage {
         'cd /work',
         'sed -i "s/version = \"[^\"]*\";/version = \"0\";/" nix/package.nix',
         'git init -q && git add -A && git -c user.name=nix -c user.email=nix@localhost commit -qm work',
-        'nix run nixpkgs#nix-update -- --flake voidstrap --version "$1" --subpackage voidimage',
-        'nix build .#voidstrap -o /tmp/result',
-        'test -x /tmp/result/bin/voidstrap',
-        'test -e /tmp/result/lib/voidstrap/libvoidimage.so',
+        'nix run nixpkgs#nix-update -- --flake betterstrap --version "$1" --subpackage voidimage',
+        'nix build .#betterstrap -o /tmp/result',
+        'test -x /tmp/result/bin/betterstrap',
+        'test -e /tmp/result/lib/betterstrap/libvoidimage.so',
         'cp nix/package.nix nix/deps.json /out/'
     ) -join "`n"
     [System.IO.File]::WriteAllText((Join-Path $workDir 'update.sh'), $updateScript + "`n")
     try {
-        $arguments = "run --rm --privileged -v voidstrap-nix:/nix -v `"${Root}:/src:ro`" -v `"${workDir}:/out`" nixos/nix:latest sh /out/update.sh $latest"
+        $arguments = "run --rm --privileged -v betterstrap-nix:/nix -v `"${Root}:/src:ro`" -v `"${workDir}:/out`" nixos/nix:latest sh /out/update.sh $latest"
         $process = Start-Process -FilePath $docker.Source -ArgumentList $arguments -NoNewWindow -PassThru -RedirectStandardOutput $log -RedirectStandardError "$log.err"
         $null = $process.Handle
         while (-not $process.WaitForExit(15000)) {
@@ -1874,7 +1874,7 @@ if (($env:PATH -split [regex]::Escape($pathSeparator)) -notcontains $dotnetDirec
 
 $script:DotNetPath = $dotnetPath
 
-Write-Host 'Voidstrap Build' -ForegroundColor Cyan
+Write-Host 'BetterStrap Build' -ForegroundColor Cyan
 Write-Host "Root:   $Root"
 Write-Host "Output: $Out"
 Write-Host "SDK:    $script:DotNetVersion"
@@ -1899,14 +1899,14 @@ $PubOpts = @(
 )
 
 $AllTargets = @(
-    [pscustomobject]@{ Name='Windows-x64';       Key='windows';          Kind='windows'; Rid='win-x64';          OutDir=(Join-Path $Out 'Windows');          Executable='Voidstrap.exe' }
-    [pscustomobject]@{ Name='Linux-x64';         Key='linux-x64';        Kind='cross';   Rid='linux-x64';        OutDir=(Join-Path $Staging 'Linux-x64');    Executable='Voidstrap' }
-    [pscustomobject]@{ Name='Linux-arm64';       Key='linux-arm64';      Kind='cross';   Rid='linux-arm64';      OutDir=(Join-Path $Staging 'Linux-arm64');  Executable='Voidstrap' }
-    [pscustomobject]@{ Name='Linux-musl-x64';    Key='linux-musl-x64';   Kind='cross';   Rid='linux-musl-x64';   OutDir=(Join-Path $Staging 'Linux-musl-x64'); Executable='Voidstrap' }
-    [pscustomobject]@{ Name='Linux-musl-arm64';  Key='linux-musl-arm64'; Kind='cross';   Rid='linux-musl-arm64'; OutDir=(Join-Path $Staging 'Linux-musl-arm64'); Executable='Voidstrap' }
-    [pscustomobject]@{ Name='macOS-x64';         Key='osx-x64';          Kind='cross';   Rid='osx-x64';          OutDir=(Join-Path $Staging 'macOS-x64');    Executable='Voidstrap' }
-    [pscustomobject]@{ Name='macOS-arm64';       Key='osx-arm64';        Kind='cross';   Rid='osx-arm64';        OutDir=(Join-Path $Staging 'macOS-arm64');  Executable='Voidstrap' }
-    [pscustomobject]@{ Name='FreeBSD-x64';       Key='freebsd-x64';      Kind='cross';   Rid='freebsd-x64';      OutDir=(Join-Path $Staging 'FreeBSD-x64');  Executable='Voidstrap' }
+    [pscustomobject]@{ Name='Windows-x64';       Key='windows';          Kind='windows'; Rid='win-x64';          OutDir=(Join-Path $Out 'Windows');          Executable='BetterStrap.exe' }
+    [pscustomobject]@{ Name='Linux-x64';         Key='linux-x64';        Kind='cross';   Rid='linux-x64';        OutDir=(Join-Path $Staging 'Linux-x64');    Executable='BetterStrap' }
+    [pscustomobject]@{ Name='Linux-arm64';       Key='linux-arm64';      Kind='cross';   Rid='linux-arm64';      OutDir=(Join-Path $Staging 'Linux-arm64');  Executable='BetterStrap' }
+    [pscustomobject]@{ Name='Linux-musl-x64';    Key='linux-musl-x64';   Kind='cross';   Rid='linux-musl-x64';   OutDir=(Join-Path $Staging 'Linux-musl-x64'); Executable='BetterStrap' }
+    [pscustomobject]@{ Name='Linux-musl-arm64';  Key='linux-musl-arm64'; Kind='cross';   Rid='linux-musl-arm64'; OutDir=(Join-Path $Staging 'Linux-musl-arm64'); Executable='BetterStrap' }
+    [pscustomobject]@{ Name='macOS-x64';         Key='osx-x64';          Kind='cross';   Rid='osx-x64';          OutDir=(Join-Path $Staging 'macOS-x64');    Executable='BetterStrap' }
+    [pscustomobject]@{ Name='macOS-arm64';       Key='osx-arm64';        Kind='cross';   Rid='osx-arm64';        OutDir=(Join-Path $Staging 'macOS-arm64');  Executable='BetterStrap' }
+    [pscustomobject]@{ Name='FreeBSD-x64';       Key='freebsd-x64';      Kind='cross';   Rid='freebsd-x64';      OutDir=(Join-Path $Staging 'FreeBSD-x64');  Executable='BetterStrap' }
 )
 
 $RequestedAll = $Only -contains 'all'
@@ -1932,7 +1932,7 @@ if ($IsWindowsHost -and $Configuration -eq 'Release' -and (@($Targets | Where-Ob
         }
     }
     if ($useSignPath) {
-        $SignPathContext = Resolve-SignPathSource -Version (Get-VoidstrapVersion)
+        $SignPathContext = Resolve-SignPathSource -Version (Get-BetterStrapVersion)
     }
 }
 
@@ -1961,7 +1961,7 @@ if (-not $IsWindowsHost -and @($Targets | Where-Object { $_.Key -eq 'windows' })
 
     if ($Targets.Count -eq 0 -and -not $BuildAndroid) {
         throw @"
-The Windows Voidstrap project cannot be built on this host.
+The Windows BetterStrap project cannot be built on this host.
 Microsoft.Windows.CsWinRT invokes cswinrt.exe during the WPF build, and that
 Windows executable cannot run natively on Linux/macOS (exit code 126).
 
@@ -2080,7 +2080,7 @@ if ($UseParallel) {
     Write-Host "Building $($buildNames -join ', ')" -ForegroundColor Cyan
 }
 $plannedPackages = [System.Collections.Generic.List[string]]::new()
-if (@($Targets | Where-Object { $_.Kind -eq 'windows' }).Count -gt 0) { $plannedPackages.Add('Windows: Voidstrap.exe') }
+if (@($Targets | Where-Object { $_.Kind -eq 'windows' }).Count -gt 0) { $plannedPackages.Add('Windows: BetterStrap.exe') }
 if ($selectedLinuxTargets.Count -gt 0) {
     if ($wantLinuxPackages) {
         $plannedFormats = @('tar.gz')
@@ -2099,7 +2099,7 @@ if ($selectedLinuxTargets.Count -gt 0) {
 }
 if (@($Targets | Where-Object { $_.Rid.StartsWith('osx-', [System.StringComparison]::Ordinal) }).Count -gt 0) {
     $macDiskImagesAvailable = $packagingShell -and ($packagingShell.Wsl -or $IsLinuxHost)
-    $plannedPackages.Add($(if ($macDiskImagesAvailable) { 'macOS: Voidstrap.app disk images and archives' } elseif ($packagingShell) { 'macOS: Voidstrap.app archives' } else { 'macOS: plain executables' }))
+    $plannedPackages.Add($(if ($macDiskImagesAvailable) { 'macOS: BetterStrap.app disk images and archives' } elseif ($packagingShell) { 'macOS: BetterStrap.app archives' } else { 'macOS: plain executables' }))
 }
 if ($BuildAndroid) { $plannedPackages.Add('Android: play and direct APKs') }
 if (@($Targets | Where-Object { $_.Rid.StartsWith('freebsd-', [System.StringComparison]::Ordinal) }).Count -gt 0) {
@@ -2130,15 +2130,15 @@ if ($appImageTool) {
 }
 $packageSources = @(Get-ChildItem -LiteralPath (Join-Path $Root 'build/Packaging') -Recurse -File |
     Sort-Object FullName | ForEach-Object { $_.FullName + ':' + (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash })
-foreach ($sourcePath in @('publish-all.ps1', 'Directory.Build.props', 'LICENSE.VOIDSTRAP', 'THIRD-PARTY-NOTICES.txt', 'legal/sources/Bibata-Cursor-v2.0.7.tar.gz', 'src/Voidstrap.App/Voidstrap.png')) {
+foreach ($sourcePath in @('publish-all.ps1', 'Directory.Build.props', 'LICENSE.BETTERSTRAP', 'THIRD-PARTY-NOTICES.txt', 'legal/sources/Bibata-Cursor-v2.0.7.tar.gz', 'src/BetterStrap.App/BetterStrap.png')) {
     $packageSources += (Get-FileHash -LiteralPath (Join-Path $Root $sourcePath) -Algorithm SHA256).Hash
 }
 if ($appImageTool) { $packageSources += (Get-FileHash -LiteralPath $appImageTool -Algorithm SHA256).Hash }
 $shellName = if ($packagingShell) { $packagingShell.Name } else { '' }
-$packageSources += "$wantLinuxPackages,$wantAppImageOnly,$shellName,$IsWindowsHost,$($env:VOIDSTRAP_APPIMAGE_GLIBC_CEILING),$($env:SOURCE_DATE_EPOCH),$($env:MACOS_DEPLOYMENT_TARGET)"
+$packageSources += "$wantLinuxPackages,$wantAppImageOnly,$shellName,$IsWindowsHost,$($env:BETTERSTRAP_APPIMAGE_GLIBC_CEILING),$($env:SOURCE_DATE_EPOCH),$($env:MACOS_DEPLOYMENT_TARGET)"
 $script:PackageContext = [pscustomobject]@{
     Shell         = $packagingShell
-    Version       = if ($packagingShell) { Get-VoidstrapVersion } else { $null }
+    Version       = if ($packagingShell) { Get-BetterStrapVersion } else { $null }
     Sources       = $packageSources
     NoteCount     = $PackageNotes.Count
     LinuxScript   = 'build/Packaging/Linux/package.sh'
@@ -2216,14 +2216,14 @@ try {
                 '-r', $t.Rid,
                 '-o', $t.OutDir,
                 '--artifacts-path', $targetArtifacts,
-                "-p:VoidstrapLinuxPackagingRoot=$targetArtifacts/",
+                "-p:BetterStrapLinuxPackagingRoot=$targetArtifacts/",
                 '--self-contained', 'true',
                 '-p:IncludeAllContentForSelfExtract=true',
                 "-p:EnableCompressionInSingleFile=$compressBundle"
             ) + $PubOpts
             if ($t.Key -eq 'freebsd-x64') {
                 $argList += @(
-                    "-p:VoidstrapFreeBSDNativeDirectory=$(Join-Path $script:FreeBSDKit.Path 'native')/",
+                    "-p:BetterStrapFreeBSDNativeDirectory=$(Join-Path $script:FreeBSDKit.Path 'native')/",
                     "-p:RestoreAdditionalProjectSources=$(Join-Path $script:FreeBSDKit.Path 'feed')",
                     "-p:RuntimeFrameworkVersion=$($script:FreeBSDKit.RuntimeVersion)"
                 )
@@ -2363,7 +2363,7 @@ if ($Failed.Count -gt 0) {
 $packageFailure = $null
 try {
     if ($script:AndroidBuild) {
-        Complete-AndroidPublish (Get-VoidstrapVersion)
+        Complete-AndroidPublish (Get-BetterStrapVersion)
     }
 
     foreach ($job in $jobs) {
@@ -2380,14 +2380,14 @@ try {
     $initialPackageNoteCount = $script:PackageContext.NoteCount
     if ($wantLinuxPackages) {
         $packageOutput = $LinuxOut
-        $x64Archive = Join-Path $packageOutput "Voidstrap_${packageVersion}_linux-x64.tar.gz"
-        $arm64Archive = Join-Path $packageOutput "Voidstrap_${packageVersion}_linux-arm64.tar.gz"
-        $aurMetadata = Join-Path $packageOutput 'Voidstrap_AUR_metadata.tar.gz'
+        $x64Archive = Join-Path $packageOutput "BetterStrap_${packageVersion}_linux-x64.tar.gz"
+        $arm64Archive = Join-Path $packageOutput "BetterStrap_${packageVersion}_linux-arm64.tar.gz"
+        $aurMetadata = Join-Path $packageOutput 'BetterStrap_AUR_metadata.tar.gz'
         if ((Test-Path -LiteralPath $x64Archive -PathType Leaf) -and (Test-Path -LiteralPath $arm64Archive -PathType Leaf) -and ($linuxPackageJobs.Count -gt 0 -or -not (Test-Path -LiteralPath $aurMetadata -PathType Leaf))) {
             if (Test-Path -LiteralPath $aurMetadata -PathType Leaf) { Remove-Item -LiteralPath $aurMetadata -Force }
             $aurStage = Join-Path $Staging 'AUR'
             Reset-OutputDirectory $aurStage
-            $aurArgs = @('build/Packaging/Arch/pkgbuild.sh', $packageVersion, (Get-RootRelativePath $aurStage), (Get-RootRelativePath $x64Archive), (Get-RootRelativePath $arm64Archive), (Get-RootRelativePath (Join-Path $packageOutput 'Voidstrap_AUR_metadata.tar.gz')))
+            $aurArgs = @('build/Packaging/Arch/pkgbuild.sh', $packageVersion, (Get-RootRelativePath $aurStage), (Get-RootRelativePath $x64Archive), (Get-RootRelativePath $arm64Archive), (Get-RootRelativePath (Join-Path $packageOutput 'BetterStrap_AUR_metadata.tar.gz')))
             Invoke-PackagingScript $shell 'AUR metadata' $aurArgs
         }
     }
@@ -2397,7 +2397,7 @@ try {
         foreach ($job in @($linuxPackageJobs | Where-Object { $_.Target.Rid -in @('linux-x64', 'linux-arm64') })) {
             Invoke-PackagingScript $shell "$($job.Target.Name) AppImage" @($script:PackageContext.LinuxScript, $job.Target.Rid, $packageVersion, 'appimage', (Get-RootRelativePath $appImageOutput), (Get-RootRelativePath $job.Expected))
             $packageArchitecture = if ($job.Target.Rid -eq 'linux-x64') { 'x86_64' } else { 'aarch64' }
-            $appImagePath = Join-Path $appImageOutput "Voidstrap_${packageVersion}_${packageArchitecture}.AppImage"
+            $appImagePath = Join-Path $appImageOutput "BetterStrap_${packageVersion}_${packageArchitecture}.AppImage"
             Assert-FileExists $appImagePath 'AppImage output'
             Assert-FileExists ($appImagePath + '.zsync') 'AppImage update information'
             if ((Get-Item -LiteralPath $appImagePath).Length -lt 1048576) {
@@ -2416,7 +2416,7 @@ try {
         }
         $packaged = @(Get-ChildItem -LiteralPath $platformOutput -File | Where-Object { $name = $_.Name; @($tokens | Where-Object { $name.Contains($_) }).Count -gt 0 })
         if ($packaged.Count -eq 0) {
-            Copy-Item -LiteralPath $job.Expected -Destination (Join-Path $platformOutput "Voidstrap_$(Get-VoidstrapVersion)_$($job.Target.Rid)") -Force
+            Copy-Item -LiteralPath $job.Expected -Destination (Join-Path $platformOutput "BetterStrap_$(Get-BetterStrapVersion)_$($job.Target.Rid)") -Force
             $licenseOutput = Join-Path $platformOutput 'licenses'
             New-Item -ItemType Directory -Path $licenseOutput -Force | Out-Null
             Copy-Item -LiteralPath (Join-Path $Root 'THIRD-PARTY-NOTICES.txt'), (Join-Path $Root 'legal/sources/Bibata-Cursor-v2.0.7.tar.gz') -Destination $licenseOutput -Force
@@ -2460,7 +2460,7 @@ if ($packageFailure) {
 }
 
 if ($SignPathContext) {
-    Invoke-SignPathWindows -Context $SignPathContext -OutputPath (Join-Path $Out 'Windows/Voidstrap.exe')
+    Invoke-SignPathWindows -Context $SignPathContext -OutputPath (Join-Path $Out 'Windows/BetterStrap.exe')
 }
 
 
